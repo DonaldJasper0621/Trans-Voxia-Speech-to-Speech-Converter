@@ -12,19 +12,19 @@ function Home() {
   return (
     <>
       <Navbar />
-        <Hero
-          cName="hero"
-          heroImg={HomeImg}
-          title="Speech to Speech"
-          text="Generate realistic audio using our online AI Voice Generator and the best translate bot. Instantly convert text in to natural-sounding speech and download as MP3 and WAV audio files."
-          buttonText="Create Free Translated AI voice video"
-          url="/"
-          btnClass="show"
-        />
+      <Hero
+        cName="hero"
+        heroImg={HomeImg}
+        title="Speech to Speech"
+        text="Generate realistic audio using our online AI Voice Generator and the best translate bot. Instantly convert text in to natural-sounding speech and download as MP3 and WAV audio files."
+        buttonText="Create Free Translated AI voice video"
+        url="/"
+        btnClass="show"
+      />
       <LandingPage />
       <LandingPage2 />
       <div>
-        <h10 className="title">Take a quick tour of Makabaka</h10>
+        <h1 className="title">Take a quick tour of Makabaka</h1>
         <div className="subtitle">
           Watch this video to learn all about our AI voice technology and how to
           use it in your products
