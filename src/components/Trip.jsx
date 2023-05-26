@@ -1,7 +1,7 @@
 import "./TripStyles.css";
 import TripData from "./TripData";
-import Apple from "../assets/apple.jpg";
-import Donald from "../assets/donald.jpg";
+import Apple from "../assets/Apple.jpg";
+import Donald from "../assets/Donald.jpg";
 import Vanessa from "../assets/vanessa.jpg";
 import Tony from "../assets/tony.jpg";
 import Jonaya from "../assets/wootae.jpg";
