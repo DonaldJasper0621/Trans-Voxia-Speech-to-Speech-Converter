@@ -1,0 +1,16 @@
+.alert-confirm {
+    @apply bg-green-500 text-white py-2 px-4 rounded !important;
+  }
+  
+  .alert-confirm:hover {
+    @apply bg-green-700 !important;
+  }
+  
+  .alert-cancel {
+    @apply bg-red-500 text-white py-2 px-4 rounded !important;
+  }
+  
+  .alert-cancel:hover {
+    @apply bg-red-700 !important;
+  }
+  
