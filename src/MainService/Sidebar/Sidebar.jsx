@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import SubMenu from "./Submenu";
+import SubMenu from "./SubMenu";
 import { motion } from "framer-motion";
 import "./SideBar.css";
 
