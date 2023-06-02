@@ -5,7 +5,7 @@ import "../components/LandingPageStyles.css";
 const LandingPage = () => {
   return (
     <div className="destination">
-      <h1 className=" text-2xl mt-52 mb-6 body-font font-poppins font-semibold">
+      <h1 className=" text-2xl mt-56 mb-6 body-font font-poppins font-semibold ">
         {" "}
         Take a Quick Tour of Makabaka
       </h1>

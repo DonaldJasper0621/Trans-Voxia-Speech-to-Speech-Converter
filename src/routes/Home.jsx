@@ -2,7 +2,7 @@ import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import LandingPage from "../components/LandingPage";
 import LandingPage2 from "../components/LandingPage2";
-import HomeImg from "../assets/boom.jpg";
+import HomeImg from "../assets/metaverse.jpg";
 import Trip from "../components/Trip";
 import Footer from "../components/Footer";
 import VideoPlayer from "../components/VideoPlayer";
