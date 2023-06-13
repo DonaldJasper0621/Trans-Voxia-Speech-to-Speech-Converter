@@ -7,34 +7,34 @@ import { FaRegFileAudio } from "react-icons/fa";
 function TableRow({ videoData }) {
   const getFileIcon = (type) => {
     if (type === "video") {
-      return <MdOutlineVideoLibrary className="mr-1" />;
+      return <MdOutlineVideoLibrary className="mr-1 h-6 w-6" />;
     } else if (type === "audio") {
-      return <FaRegFileAudio className="mr-1" />;
+      return <FaRegFileAudio className="mr-1 h-6 w-6" />;
     } else if (type === "text") {
-      return <AiOutlineFolderOpen className="mr-1" />;
+      return <AiOutlineFolderOpen className="mr-1 h-6 w-6" />;
     } else {
       return null;
     }
   };
 
   return (
-    <div className="text-center border-b border-gray-200 flex py-8 pl-7 w-[100vh]">
-      <td className="flex py-3">
-        <input type="checkbox" className="mx-auto" />
-      </td>
-      <td className="flex mr-auto">
+    <div className="text-center border-b border-gray-200 flex py-8 pl-7 w-full">
+      <div className="flex py-3">
+        <input type="checkbox" className="mx-auto h-4 w-4" />
+      </div>
+      <div className="flex mr-auto">
         <div className="w-full flex items-center">
           {/* Render the appropriate icon based on the data type */}
           {getFileIcon(videoData.type)}
-          <div className="text-sm mt-2 ml-4 flex overflow-hidden">
+          <div className="text-sm mt-2 ml-4 flex overflow-hidden ">
             <p>{videoData.title}</p>
             <p>{videoData.language}</p>
             <p>{videoData.speaker}</p>
             <p>{videoData.creationDate}</p>
           </div>
         </div>
-      </td>
-      <td className="flex items-end justify-end">
+      </div>
+      <div className="flex items-end justify-end">
         {" "}
         {/* Use flexbox with justify-between */}
         <NavLink
@@ -83,7 +83,7 @@ function TableRow({ videoData }) {
             Transcript
           </NavLink>
         )}
-      </td>
+      </div>
     </div>
   );
 }
@@ -187,11 +187,11 @@ const sampleData = [
 function App() {
   return (
     <div className="w-full">
-      <tbody className="">
+      <div className="w-full">
         {sampleData.map((data, index) => (
           <TableRow key={index} videoData={data} />
         ))}
-      </tbody>
+      </div>
     </div>
   );
 }

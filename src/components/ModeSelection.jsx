@@ -66,7 +66,7 @@ function ModeSelection() {
   };  
 
   return (
-    <div className="container overflow-scroll h-screen">
+    <div className="w-full overflow-scroll h-screen">
       <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-green-500 to-indigo-800">
         <span>
           You have <strong>15</strong> minutes &amp; <strong>10</strong> free

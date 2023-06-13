@@ -33,7 +33,7 @@ function Tabs({ tabs }) {
   };
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden w-full">
       {loading && (
         <div className="loading fixed inset-0 flex items-center justify-center ml-20">
           <PacmanLoader color="#36d7b7" size={30} />
@@ -73,7 +73,7 @@ function Tabs({ tabs }) {
             </div>
           </div>
 
-          <div className="tab-content">
+          <div className="tab-content w-full">
             {tabs.find((tab) => tab.id === activeTab).content}
           </div>
         </>
