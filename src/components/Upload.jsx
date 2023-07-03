@@ -33,6 +33,26 @@ const VideoDashboard = () => {
 
   const tabs = [
     {
+      id: 3,
+      icon: <MdOutlineDescription className="mr-2" size={25} />,
+      label: (
+        <span className=" font-semibold text-lg text-slate-500 ">
+         File Overview
+        </span>
+      ),
+      content: <TableRow />,
+    },
+    {
+      id: 2,
+      icon: <FaRegFileAudio className="mr-2" size={25} />,
+      label: (
+        <span className=" font-semibold text-lg text-slate-500 ">
+          MP3. File
+        </span>
+      ),
+      content: <Medialibrary />,
+    },
+    {
       id: 1,
       icon: <MdOutlineVideoLibrary className="mr-2" size={25} />,
       label: (
@@ -58,26 +78,7 @@ const VideoDashboard = () => {
           ))}
         </div>
       ),
-    },
-    {
-      id: 2,
-      icon: <FaRegFileAudio className="mr-2" size={25} />,
-      label: (
-        <span className=" font-semibold text-lg text-slate-500 ">
-          MP3. File
-        </span>
-      ),
-      content: <Medialibrary />,
-    },
-    {
-      id: 3,
-      icon: <MdOutlineDescription className="mr-2" size={25} />,
-      label: (
-        <span className=" font-semibold text-lg text-slate-500 ">
-          TypeScript File
-        </span>
-      ),
-      content: <TableRow />,
+      
     },
   ];
 

@@ -42,7 +42,8 @@ function Tabs({ tabs }) {
 
       {!loading && (
         <>
-          <div className="tabs flex items-center w-full ml-9 mb-4 gap-8">
+          <div className="tabs flex items-center w-full  justify-between ">
+            <div className="flex gap-8 ml-5">
             {tabs.map((tab) => (
               <div
                 key={tab.id}
@@ -57,7 +58,8 @@ function Tabs({ tabs }) {
                 {tab.label}
               </div>
             ))}
-            <div className="ml-96 flex gap-7">
+            </div>
+            <div className="flex gap-7 mr-7">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold text-justify rounded relative flex items-center justify-center z-50 border-spacing-5 w-28 p-2"
                 onClick={handleUploadClick}

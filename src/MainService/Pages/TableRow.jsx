@@ -34,7 +34,7 @@ function TableRow({ videoData }) {
           </div>
         </div>
       </div>
-      <div className="flex items-end justify-end">
+      <div className="flex items-end justify-end mr-6">
         {" "}
         {/* Use flexbox with justify-between */}
         <NavLink
@@ -74,6 +74,15 @@ function TableRow({ videoData }) {
           </>
         )}
         {videoData.type === "audio" && (
+          <>
+            <NavLink
+            to="/audio"
+            target="_blank"
+            className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+          >
+            <FaRegFileAudio className="mr-1" />
+            Audio
+          </NavLink>
           <NavLink
             to="/transcript"
             target="_blank"
@@ -82,6 +91,27 @@ function TableRow({ videoData }) {
             <MdOutlineVideoLibrary className="mr-1" />
             Transcript
           </NavLink>
+          </>
+        )}
+        {videoData.type === "text" && (
+          <>
+            <NavLink
+            to="/audio"
+            target="_blank"
+            className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+          >
+            <FaRegFileAudio className="mr-1" />
+            Audio
+          </NavLink>
+          <NavLink
+            to="/transcript"
+            target="_blank"
+            className="bg-purple-300 text-white px-4 py-2 rounded flex items-center pointer-events-none"
+          >
+            <MdOutlineVideoLibrary className="mr-1" />
+            Transcript
+          </NavLink>
+          </>
         )}
       </div>
     </div>
