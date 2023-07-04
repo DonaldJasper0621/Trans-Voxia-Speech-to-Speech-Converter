@@ -5,7 +5,6 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import Swal from "sweetalert2";
 import "../components/tailwind-alerts.css";
 
-
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
   const [videoMetadata, setVideoMetadata] = useState({
@@ -37,7 +36,7 @@ function ModeSelection() {
       },
       buttonsStyling: false,
     });
-  
+
     swalWithBootstrapButtons
       .fire({
         title: "Sure to proceed?",
@@ -63,7 +62,7 @@ function ModeSelection() {
           );
         }
       });
-  };  
+  };
 
   return (
     <div className="w-full overflow-scroll h-screen">
@@ -137,37 +136,37 @@ function ModeSelection() {
           <div className="block">
             <label
               for="small"
-              class=" mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class=" font-medium text-gray-900 dark:text-white text-base "
             >
-              Small select
+              Output Language
             </label>
             <select
               id="small"
               class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Choose a country</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected>ZH</option>
+              <option value="US">KO</option>
+              <option value="CA">EN-US</option>
+              <option value="FR">GERMAN</option>
+              <option value="DE">JPY</option>
             </select>
           </div>
           <div className="block">
             <label
               for="default"
-              class="mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Default select
+              Output Voices
             </label>
             <select
               id="default"
               class=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Choose a country</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected>linchiacheng(Male)</option>
+              <option value="US">ko-KR-Standard-A(Female)</option>
+              <option value="CA"> larry(Male)</option>
+              <option value="FR">zh-TW-YunJheNeural</option>
+              <option value="DE">VanessaHuang(Feamle)</option>
             </select>
           </div>
         </div>
@@ -175,44 +174,58 @@ function ModeSelection() {
           <div className="block ">
             <label
               for="small"
-              class=" mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class=" mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Small select
+              Output Type
             </label>
             <select
               id="small"
               class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Choose a country</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected>Video.mp4</option>
+              <option value="US">Audio.mp3</option>
+              <option value="CA">TypeScript.text</option>
             </select>
           </div>
           <div className="block">
             <label
               for="default"
-              class="mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Default select
+              Processing Mode
             </label>
             <select
               id="default"
               class=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Choose a country</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected>
+                Direct output without editing the transcript
+              </option>
+              <option value="US">Output with editing the transcript</option>
             </select>
           </div>
         </div>
-        <div className="justify-end flex items-center mt-20">
+        <div className="flex gap-40 ml-32 mt-16">
+          <div className="block ">
+            <label
+              for="small"
+              class=" mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              TranScript Style
+            </label>
+            <select
+              id="small"
+              class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option selected>General Wording</option>
+              <option value="US">Precision Wording</option>
+            </select>
+          </div>
+        </div>
+        <div className="justify-end flex items-center ">
           <button
             type="button"
-            class="text-gray-900  w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2"
+            class="text-gray-900  w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mb-6"
             onClick={showAlert}
           >
             Confirm
