@@ -4,6 +4,8 @@ import React, { useRef, useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Swal from "sweetalert2";
 import "../components/tailwind-alerts.css";
+import axios from "axios";
+import { data } from "autoprefixer";
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -12,6 +14,41 @@ function ModeSelection() {
     length: "",
     location: "",
   });
+
+  useEffect(() => {
+    axios
+      .get("http://140.119.19.16:8001/language/")
+      .then((response) => {
+        setLanguageList(response.data);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
+  const [languagelist, setLanguageList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://140.119.19.16:8001/voices/")
+      .then((response) => {
+        setVoices(response.data);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
+  const [voices, setVoices] = useState({});
+  const [voicelanguageselect, setVoiceLanguageSelect] = useState("");
+
+  const handleLanguageChange = (events) => {
+    setVoiceLanguageSelect(events.target.value);
+    console.log(events);
+  };
+
+  //   const a = {};
+  // a['name'] = 'jack';
 
   useEffect(() => {
     if (videoFile) {
@@ -141,14 +178,18 @@ function ModeSelection() {
               Output Language
             </label>
             <select
+              onChange={handleLanguageChange}
               id="small"
               class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>ZH</option>
-              <option value="US">KO</option>
-              <option value="CA">EN-US</option>
-              <option value="FR">GERMAN</option>
-              <option value="DE">JPY</option>
+              {languagelist.map((data, index) => (
+                <option
+                  key={data.original_language}
+                  value={data.original_language}
+                >
+                  {data.mapped_language}
+                </option>
+              ))}
             </select>
           </div>
           <div className="block">
@@ -162,11 +203,13 @@ function ModeSelection() {
               id="default"
               class=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>linchiacheng(Male)</option>
-              <option value="US">ko-KR-Standard-A(Female)</option>
-              <option value="CA"> larry(Male)</option>
-              <option value="FR">zh-TW-YunJheNeural</option>
-              <option value="DE">VanessaHuang(Feamle)</option>
+              {voices[voicelanguageselect] &&
+                voices[voicelanguageselect].usable_voices.map((value) => (
+                  <option key={value} value={value}>
+                    {" "}
+                    {value}{" "}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
