@@ -248,27 +248,10 @@ function ModeSelection() {
             </select>
           </div>
         </div>
-        <div className="flex gap-40 ml-32 mt-16">
-          <div className="block ">
-            <label
-              for="small"
-              class=" mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              TranScript Style
-            </label>
-            <select
-              id="small"
-              class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option selected>General Wording</option>
-              <option value="US">Precision Wording</option>
-            </select>
-          </div>
-        </div>
         <div className="justify-end flex items-center ">
           <button
             type="button"
-            class="text-gray-900  w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mb-6"
+            class="text-gray-900 w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mt-20"
             onClick={showAlert}
           >
             Confirm

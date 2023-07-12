@@ -105,7 +105,7 @@ const Sidebar = () => {
               className="w-6 h-6"
             />
           </NavLink>
-          <span className="text-xl whitespace-pre">Makabaka</span>
+          <span className="text-xl whitespace-pre">Trans Voxia</span>
         </div>
 
         <div className="flex flex-col  h-full">
