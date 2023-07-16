@@ -31,9 +31,10 @@ function LoginPage() {
         console.log(response);
       })
       .catch(function (error) {
-        if (error.response.status === 400)
+        if (error.response.status === 400) {
           alert("Please check your email and password");
-        console.log(error);
+          console.log(error);
+        } else alert("Oops something went wrong please try it again later");
       });
   }
 

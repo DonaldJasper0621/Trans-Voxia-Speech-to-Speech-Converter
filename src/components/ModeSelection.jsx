@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import "../components/tailwind-alerts.css";
 import axios from "axios";
 import { data } from "autoprefixer";
+import qs from "qs";
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -20,6 +21,7 @@ function ModeSelection() {
       .get("http://140.119.19.16:8001/language/")
       .then((response) => {
         setLanguageList(response.data);
+        setposttargetlanguage(response.data[0].original_language);
       })
       .catch((error) => {
         alert(error);
@@ -33,6 +35,8 @@ function ModeSelection() {
       .get("http://140.119.19.16:8001/voices/")
       .then((response) => {
         setVoices(response.data);
+        setpostvoice(Object.values(response.data)[0].usable_voices[0]);
+        setVoiceLanguageSelect(Object.keys(response.data)[0]);
       })
       .catch((error) => {
         alert(error);
@@ -43,16 +47,54 @@ function ModeSelection() {
   const [voicelanguageselect, setVoiceLanguageSelect] = useState("");
 
   const handleLanguageChange = (events) => {
+    setpostvoice(voices[events.target.value].usable_voices[0]);
     setVoiceLanguageSelect(events.target.value);
+    setposttargetlanguage(events.target.value);
     console.log(events);
   };
 
+  const handleVoiceLanguageChange = (events) => {
+    setpostvoice(events.target.value);
+  };
+  // ---------------------------------------------------------------------
+  const handleSubmitClick = (events) => {
+    axios.postForm(
+      `http://140.119.19.16:8001/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
+      {
+        file: document.querySelector("#video").files[0],
+      },
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: `Bearer ${sessionStorage.getItem("key")}`,
+          "X-CSRFToken":
+            "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
+        },
+      }
+    );
+  };
+
+  const [posttargetlanguage, setposttargetlanguage] = useState("");
+  const [postvoice, setpostvoice] = useState("");
+  const [postoutputmode, setpostoutputmode] = useState("transcript");
+  const [posttitle, setposttitle] = useState("");
+  const [postneedmodify, setpostneedmodify] = useState("false");
+  const [postfileupload, setpostfileupload] = useState("");
+
+  const handleNeedModifyChange = (events) => {
+    setpostneedmodify(events.target.value);
+  };
+
+  const handleOutputModeChange = (events) => {
+    setpostoutputmode(events.target.value);
+  };
   //   const a = {};
   // a['name'] = 'jack';
 
   useEffect(() => {
     if (videoFile) {
       const url = URL.createObjectURL(videoFile);
+      setposttitle(videoFile.name.split(".")[0]);
       setVideoMetadata({
         name: videoFile.name,
         length: videoFile.duration,
@@ -86,6 +128,7 @@ function ModeSelection() {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          handleSubmitClick();
           swalWithBootstrapButtons.fire(
             "Transcribing in process!",
             "Your file is being processed.",
@@ -160,6 +203,7 @@ function ModeSelection() {
             </svg>
             <span className="mt-2 text-base leading-normal">Select a file</span>
             <input
+              id="video"
               type="file"
               className="hidden"
               onChange={handleVideoChange}
@@ -172,15 +216,15 @@ function ModeSelection() {
         <div className="flex gap-40 ml-32">
           <div className="block">
             <label
-              for="small"
-              class=" font-medium text-gray-900 dark:text-white text-base "
+              htmlFor="small"
+              className=" font-medium text-gray-900 dark:text-white text-base "
             >
               Output Language
             </label>
             <select
               onChange={handleLanguageChange}
               id="small"
-              class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               {languagelist.map((data, index) => (
                 <option
@@ -194,14 +238,15 @@ function ModeSelection() {
           </div>
           <div className="block">
             <label
-              for="default"
-              class="mb-2 text-base font-medium text-gray-900 dark:text-white"
+              htmlFor="default"
+              className="mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
               Output Voices
             </label>
             <select
+              onChange={handleVoiceLanguageChange}
               id="default"
-              class=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               {voices[voicelanguageselect] &&
                 voices[voicelanguageselect].usable_voices.map((value) => (
@@ -216,42 +261,44 @@ function ModeSelection() {
         <div className="flex gap-40 ml-32 mt-16">
           <div className="block ">
             <label
-              for="small"
-              class=" mb-2 text-base font-medium text-gray-900 dark:text-white"
+              htmlFor="small"
+              className=" mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Output Type
+              Output Mode
             </label>
             <select
+              onChange={handleOutputModeChange}
               id="small"
-              class="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Video.mp4</option>
-              <option value="US">Audio.mp3</option>
-              <option value="CA">TypeScript.text</option>
+              <option defaultValue={"transcript"}>Transcript</option>
+              <option value="audio">Audio.mp3</option>
+              <option value="video">Video.mp4</option>
             </select>
           </div>
           <div className="block">
             <label
-              for="default"
-              class="mb-2 text-base font-medium text-gray-900 dark:text-white"
+              htmlFor="default"
+              className="mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
               Processing Mode
             </label>
             <select
+              onChange={handleNeedModifyChange}
               id="default"
-              class=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>
+              <option defaultValue={"false"}>
                 Direct output without editing the transcript
               </option>
-              <option value="US">Output with editing the transcript</option>
+              <option value={true}>Output with editing the transcript</option>
             </select>
           </div>
         </div>
         <div className="justify-end flex items-center ">
           <button
             type="button"
-            class="text-gray-900 w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mt-20"
+            className="text-gray-900 w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mt-20"
             onClick={showAlert}
           >
             Confirm
