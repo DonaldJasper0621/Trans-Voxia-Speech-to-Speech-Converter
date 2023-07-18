@@ -21,13 +21,13 @@ function LoginPage() {
         {
           headers: {
             "X-CSRFToken":
-              "98AcVKLrlGVptDY7oMFZUFjAJ0Gd2s1gS6g2Ik7v2c5vnIPZQtNBEWFnOt0LGgUK",
+              "vvZfHgsUs3fdyOjeeQlYMkobXpbrY5ydjKjWZHiZJ1xnlEREOlpqPGPLBfl1vCDh",
           },
         }
       )
       .then(function (response) {
         if (response.status === 200)
-          sessionStorage.setItem("key", response.data.key);
+          sessionStorage.setItem("key", response.data.access);
         console.log(response);
       })
       .catch(function (error) {

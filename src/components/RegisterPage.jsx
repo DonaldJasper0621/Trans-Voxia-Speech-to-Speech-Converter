@@ -22,7 +22,7 @@ function RegisterPage() {
           password2: confirmpasswordRef.current.value,
         })
         .then(function (response) {
-          if (response.status === 204) location.href = "/login";
+          if (response.status === 201) location.href = "/login";
           console.log(response);
         })
         .catch(function (error) {
