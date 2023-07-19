@@ -28,6 +28,7 @@ function LoginPage() {
       .then(function (response) {
         if (response.status === 200)
           sessionStorage.setItem("key", response.data.access);
+          document.cookie += "transvoxia-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg5NjgyNzE4LCJpYXQiOjE2ODk2ODI0MTgsImp0aSI6IjcwOGUxZjViZmVhYzRkYTA4OGRiMTQxZWY2NjE4MTk3IiwidXNlcl9pZCI6OX0.0YdUDrss4VAeFdtXVSDxFpgJDQtpxMmNieT56favuQs;"
         console.log(response);
       })
       .catch(function (error) {

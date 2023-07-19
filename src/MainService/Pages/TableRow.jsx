@@ -3,18 +3,31 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { MdOutlineVideoLibrary, MdOutlineDescription } from "react-icons/md";
 import { FaRegFileAudio } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useState } from "react";
+import React, { useRef, useEffect } from "react";
+import axios from "axios";
 
-function TableRow({ videoData }) {
-  const getFileIcon = (type) => {
-    if (type === "video") {
+function TableRow({ data }) {
+  const getFileIcon = (mode) => {
+    if (mode === "video") {
       return <MdOutlineVideoLibrary className="mr-1 h-6 w-6" />;
-    } else if (type === "audio") {
+    } else if (mode === "audio") {
       return <FaRegFileAudio className="mr-1 h-6 w-6" />;
-    } else if (type === "text") {
+    } else if (mode === "transcript") {
       return <AiOutlineFolderOpen className="mr-1 h-6 w-6" />;
     } else {
       return null;
     }
+  };
+
+  const getRequestTime = (requestTime) => {
+    const date = new Date(requestTime);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Adding 1 since months are zero-based
+    const day = date.getDate();
+
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -25,38 +38,38 @@ function TableRow({ videoData }) {
       <div className="flex mr-auto">
         <div className="w-full flex items-center">
           {/* Render the appropriate icon based on the data type */}
-          {getFileIcon(videoData.type)}
+          {getFileIcon(data.mode)}
           <div className="text-sm mt-2 ml-4 flex overflow-hidden ">
-            <p>{videoData.title}</p>
-            <p>{videoData.language}</p>
-            <p>{videoData.speaker}</p>
-            <p>{videoData.creationDate}</p>
+            <p>{data.title}</p>
+            <p>{data.targetlanguage}</p>
+            <p>{data.voice_selection}</p>
+            <p>{getRequestTime(data.request_time)}</p>
           </div>
         </div>
       </div>
       <div className="flex items-end justify-end mr-6">
         {" "}
         {/* Use flexbox with justify-between */}
-        <NavLink
+        {/* <NavLink
           to="/download"
           target="_blank"
           className="bg-blue-500 text-white px-4 py-2 rounded mr-2 flex items-center"
         >
           <MdOutlineDescription className="mr-1" />
           Download
-        </NavLink>
+        </NavLink> */}
         <NavLink
-          to="/edit"
+          to={"/service/transcript"}
           target="_blank"
-          className="bg-green-500 text-white px-4 py-2 rounded mr-2 flex items-center"
+          className="bg-green-500 text-white px-4 py-2 rounded flex items-center mr-2"
         >
-          <IoMdAddCircleOutline className="mr-1" />
-          Edit
+          <MdOutlineVideoLibrary />
+          Transcript
         </NavLink>
-        {videoData.type === "video" && (
+        {data.mode === "video" && (
           <>
             <NavLink
-              to="/audio"
+              to={"/service/audio"}
               target="_blank"
               className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
             >
@@ -64,53 +77,53 @@ function TableRow({ videoData }) {
               Audio
             </NavLink>
             <NavLink
-              to="/transcript"
+              to={"/service/video"}
               target="_blank"
-              className="bg-yellow-500 text-white px-4 py-2 rounded flex items-center"
+              className="bg-purple-500 text-white px-4 py-2 rounded mr-2 flex items-center"
             >
-              <MdOutlineVideoLibrary className="mr-1" />
-              Transcript
+              <IoMdAddCircleOutline className="mr-1" />
+              Video
             </NavLink>
           </>
         )}
-        {videoData.type === "audio" && (
+        {data.mode === "audio" && (
           <>
             <NavLink
-            to="/audio"
-            target="_blank"
-            className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
-          >
-            <FaRegFileAudio className="mr-1" />
-            Audio
-          </NavLink>
-          <NavLink
-            to="/transcript"
-            target="_blank"
-            className="bg-yellow-500 text-white px-4 py-2 rounded flex items-center"
-          >
-            <MdOutlineVideoLibrary className="mr-1" />
-            Transcript
-          </NavLink>
+              to={"/service/audio"}
+              target="_blank"
+              className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
+            >
+              <FaRegFileAudio className="mr-1" />
+              Audio
+            </NavLink>
+            <NavLink
+              to={"/service/video"}
+              target="_blank"
+              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center"
+            >
+              <IoMdAddCircleOutline className="mr-1" />
+              Video
+            </NavLink>
           </>
         )}
-        {videoData.type === "text" && (
+        {data.mode === "transcript" && (
           <>
             <NavLink
-            to="/audio"
-            target="_blank"
-            className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
-          >
-            <FaRegFileAudio className="mr-1" />
-            Audio
-          </NavLink>
-          <NavLink
-            to="/transcript"
-            target="_blank"
-            className="bg-purple-300 text-white px-4 py-2 rounded flex items-center pointer-events-none"
-          >
-            <MdOutlineVideoLibrary className="mr-1" />
-            Transcript
-          </NavLink>
+              to="/audio"
+              target="_blank"
+              className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+            >
+              <FaRegFileAudio className="mr-1" />
+              Audio
+            </NavLink>
+            <NavLink
+              to={"/service/video"}
+              target="_blank"
+              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+            >
+              <IoMdAddCircleOutline className="mr-1" />
+              Video
+            </NavLink>
           </>
         )}
       </div>
@@ -120,108 +133,38 @@ function TableRow({ videoData }) {
 
 // Example usage of TableRow component
 // Example usage of TableRow component
-const sampleData = [
-  {
-    src: "https://example.com/video1.mp4",
-    title: "Video 1",
-    currentTime: "0:35",
-    speaker: "John Doe",
-    creationDate: "2023-05-24",
-    type: "video",
-    language: "English",
-  },
-  {
-    src: "https://example.com/audio1.mp3",
-    title: " Anuel aa GQ test",
-    currentTime: "2:15",
-    speaker: "Jane Smith",
-    creationDate: "2023-05-25",
-    type: "audio",
-    language: "Spanish",
-  },
-  {
-    src: "https://example.com/text1.txt",
-    title: "Mala Santa Becky G ",
-    currentTime: "N/A",
-    speaker: "Keldon Johnson",
-    creationDate: "2023-05-26",
-    type: "text",
-    language: "French",
-  },
-  // Add more data entries here with different types and languages
-  {
-    src: "https://example.com/video2.mp4",
-    title: "Video 2",
-    currentTime: "1:20",
-    speaker: "Alice Johnson",
-    creationDate: "2023-05-27",
-    type: "video",
-    language: "German",
-  },
-  {
-    src: "https://example.com/audio2.mp3",
-    title: "Audio 2",
-    currentTime: "3:45",
-    speaker: "Bob Wilson",
-    creationDate: "2023-05-28",
-    type: "audio",
-    language: "Italian",
-  },
-  {
-    src: "https://example.com/text2.txt",
-    title: "Text 2",
-    currentTime: "N/A",
-    speaker: "N/A",
-    creationDate: "2023-05-29",
-    type: "text",
-    language: "Japanese",
-  },
-  {
-    src: "https://example.com/text2.txt",
-    title: "Text 2",
-    currentTime: "N/A",
-    speaker: "N/A",
-    creationDate: "2023-05-29",
-    type: "text",
-    language: "Japanese",
-  },
-  {
-    src: "https://example.com/text2.txt",
-    title: "Text 2",
-    currentTime: "N/A",
-    speaker: "N/A",
-    creationDate: "2023-05-29",
-    type: "text",
-    language: "Japanese",
-  },
-  {
-    src: "https://example.com/text2.txt",
-    title: "Text 2",
-    currentTime: "N/A",
-    speaker: "N/A",
-    creationDate: "2023-05-29",
-    type: "text",
-    language: "Japanese",
-  },
-  {
-    src: "https://example.com/text2.txt",
-    title: "Text 2",
-    currentTime: "N/A",
-    speaker: "N/A",
-    creationDate: "2023-05-29",
-    type: "text",
-    language: "Japanese",
-  },
-];
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    axios
+      .get(`http://140.119.19.16:8001/tasks/?n=30&page=${page}`)
+      .then((response) => {
+        setTasks((prevTasks) => [...prevTasks, ...response.data]);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, [page]);
+
+  const fetchMoreData = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
   return (
     <div className="w-full">
-      <div className="w-full">
-        {sampleData.map((data, index) => (
-          <TableRow key={index} videoData={data} />
+      <InfiniteScroll
+        dataLength={tasks.length}
+        next={fetchMoreData} // Updated here
+        hasMore={true} // You can update this based on your API response
+        loader={<h4>Loading...</h4>}
+      >
+        {tasks.map((data, index) => (
+          <TableRow key={index} data={data} />
         ))}
-      </div>
+      </InfiniteScroll>
     </div>
   );
 }

@@ -14,6 +14,10 @@ import Medialibrary from "./MainService/Pages/MediaLibrary";
 import Gallery from "./MainService/Pages/Gallery";
 import Processing from "./MainService/Pages/Processing";
 import TableRow from "./MainService/Pages/TableRow";
+import Transcripts from "./MainService/Pages/Transcripts";
+import Audios from "./MainService/Pages/Audios";
+import Videos from "./MainService/Pages/Videos";
+import EditTranscripts from "./MainService/Pages/EditTranscript";
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -34,6 +38,10 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/service/transcript" element={<Transcripts />}/>
+          <Route path="/service/video" element={<Videos />}/>
+          <Route path="/service/audio" element={<Audios />}/>
+          <Route path="/service/edittranscripts" element={<EditTranscripts />}/>
         </Routes>
       </div>
     </>

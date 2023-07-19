@@ -66,7 +66,7 @@ function ModeSelection() {
       {
         headers: {
           "content-type": "multipart/form-data",
-          Authorization: `Bearer ${sessionStorage.getItem("key")}`,
+          Cookie: `transvoxia-auth=${sessionStorage.getItem("key")};`,
           "X-CSRFToken":
             "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
         },

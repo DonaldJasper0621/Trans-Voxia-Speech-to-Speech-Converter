@@ -9,6 +9,7 @@ import Processing from "../MainService/Pages/Processing";
 import Tabs from "./Tabs";
 import Medialibrary from "../MainService/Pages/MediaLibrary";
 import TableRow from "../MainService/Pages/TableRow";
+import { Fade } from '@mui/material';
 
 const VideoDashboard = () => {
   const mockVideos = [
@@ -93,6 +94,7 @@ const VideoDashboard = () => {
   //   };
 
   return (
+    <Fade in={open} timeout={500}>
     <div className="w-full overflow-scroll h-screen">
       <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-green-500 to-indigo-800">
         <span>
@@ -108,13 +110,16 @@ const VideoDashboard = () => {
           <span>Upgrade</span>
         </a>
       </div>
+      
       <div className=" flex items-center w- py-8  ml-9">
         <AiOutlineFolderOpen className="mr-2" size={30} />
         <span className=" text-2xl font-bold text-slate-500">Files</span>
       </div>
+     
 
       <Tabs tabs={tabs} />
     </div>
+    </Fade>
   );
 };
 
