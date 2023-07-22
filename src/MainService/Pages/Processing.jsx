@@ -6,19 +6,31 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import LongMenu from "./LongMenu"
+import LongMenu from "./LongMenu";
+import { useNavigate } from 'react-router-dom';
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Processing = () => {
   const [apiData, setApiData] = useState([]);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [showDirectOptions, setShowDirectOptions] = useState(false);
   const [showEditOptions, setShowEditOptions] = useState(false);
+  const [loading, setLoading] = useState(false);
   const threeDottedButtonRefs = useRef({});
+  const navigate = useNavigate();
 
   // const handleDirectVideoOptions = (videoId) => {
   //   setSelectedVideoId(videoId);
   //   setShowDirectOptions(!showDirectOptions);
   // };
+
+  const handleNaviagteEditTranscriptClick = (video) => {
+    setLoading(true);
+    setTimeout(() => {
+      navigate("/service/edittranscripts", { state: { video } });
+      setLoading(false);
+    }, 2000); // adjust this time as needed
+  };
 
   const handleEditVideoOptions = (videoId) => {
     setSelectedVideoId(videoId);
@@ -84,10 +96,16 @@ const Processing = () => {
   const editVideos = apiData.filter((video) => video.needModify);
 
   return (
-    
-      <div className="flex">
-        <Sidebar />
-        <Fade in={open} timeout={500}>
+    <div className="flex">
+      {loading ? (
+      <div className="flex justify-center items-center h-screen w-screen">
+        <ScaleLoader color="#36d7b7" />
+      </div>
+    ) : (
+      <>
+
+      <Sidebar />
+      <Fade in={open} timeout={500}>
         <div className="w-full overflow-scroll h-screen">
           <div className="container mx-auto px-4">
             <div className="mb-8">
@@ -114,8 +132,14 @@ const Processing = () => {
                       </p>
                       <p>{video.status}</p>
                     </div>
-                  <LongMenu options={[{name: 'Stop the task', onClick: handleStopTaskClick(video.taskID)}]}>
-                  </LongMenu>
+                    <LongMenu
+                      options={[
+                        {
+                          name: "Stop the task",
+                          onClick: handleStopTaskClick(video.taskID),
+                        },
+                      ]}
+                    ></LongMenu>
                   </div>
                 ))}
               </div>
@@ -145,30 +169,27 @@ const Processing = () => {
                       </p>
                       <p>{video.status}</p>
                     </div>
-                    {!video.processingDone && (
-                      <div
-                        ref={threeDottedButtonRefs.current[video.taskID]}
-                        className="relative inline-block text-left"
-                      >
-                        <button
-                          type="button"
-                          className="rounded-full p-2 hover:bg-gray-200"
-                          onClick={() => handleEditVideoOptions(video.taskID)}
-                        >
-                          <i className="fas fa-ellipsis-v"></i>
-                        </button>
-                        <LongMenu options={[{name: 'Edit Transcript', onClick:null},{name: 'Stop the task', onClick: handleStopTaskClick(video.taskID)},{name: 'Direct Output', onClick: null}]}>
-                  </LongMenu>
-                      </div>
-                    )}
+
+                    <LongMenu
+                      options={[
+                        { name: "Edit Transcript", onClick: () => handleNaviagteEditTranscriptClick(video) },
+                        {
+                          name: "Stop the task",
+                          onClick: handleStopTaskClick(video.taskID),
+                        },
+                        { name: "Direct Output", onClick: null },
+                      ]}
+                    ></LongMenu>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
-        </Fade>
-      </div>
+      </Fade>
+      </>
+    )}
+    </div>
   );
 };
 
