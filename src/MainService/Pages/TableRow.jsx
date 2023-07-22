@@ -133,15 +133,17 @@ function TableRow({ data }) {
 
 // Example usage of TableRow component
 // Example usage of TableRow component
-
+const PAGE_ITEM = 100;
 function App() {
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     axios
-      .get(`http://140.119.19.16:8001/tasks/?n=30&page=${page}`)
+      .get(`http://140.119.19.16:8001/tasks/?n=${PAGE_ITEM}&page=${page}`)
       .then((response) => {
+        console.log("1");
         setTasks((prevTasks) => [...prevTasks, ...response.data]);
       })
       .catch((error) => {
@@ -150,15 +152,28 @@ function App() {
   }, [page]);
 
   const fetchMoreData = () => {
-    setPage((prevPage) => prevPage + 1);
+    console.log("2");
+    axios
+      .get(`http://140.119.19.16:8001/tasks/?n=${PAGE_ITEM}&page=${page}`)
+      .then((response) => {
+        setTasks((prevTasks) => [...prevTasks, ...response.data]);
+        if (response.data.length < PAGE_ITEM) {
+          setHasMore(false);
+        } else {
+          setPage((prevPage) => prevPage + 1);
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
-    <div className="w-full">
+    <div id="test" className="w-full">
       <InfiniteScroll
-        dataLength={tasks.length}
+        dataLength={PAGE_ITEM}
         next={fetchMoreData} // Updated here
-        hasMore={true} // You can update this based on your API response
+        hasMore={hasMore} // You can update this based on your API response
         loader={<h4>Loading...</h4>}
       >
         {tasks.map((data, index) => (

@@ -30,10 +30,10 @@ function Navbar() {
               </motion.li>)
         })}
         <motion.li whileHover={{ scale: 1.4 }}>
-        {sessionStorage.getItem("key") ? <Link to={"/login"}>
-        <button className='font font-semibold'>Log In</button> 
-        </Link> : <Link to={"/logout"}>
+        {sessionStorage.getItem("key") ? <Link to={"/logout"}>
         <button className='font font-semibold'>Log Out</button> 
+        </Link> : <Link to={"/login"}>
+        <button className='font font-semibold'>Log In</button> 
         </Link>}
         </motion.li>
       </ul>

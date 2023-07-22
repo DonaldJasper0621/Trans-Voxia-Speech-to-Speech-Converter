@@ -6,10 +6,12 @@ import { MdOutlineVideoLibrary, MdOutlineDescription } from "react-icons/md";
 import { FaRegFileAudio } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Processing from "../MainService/Pages/Processing";
+import AnalyticsPage from"../MainService/Pages/AnalyticsPage"
 import Tabs from "./Tabs";
 import Medialibrary from "../MainService/Pages/MediaLibrary";
 import TableRow from "../MainService/Pages/TableRow";
 import { Fade } from '@mui/material';
+import { Analytics } from "@mui/icons-material";
 
 const VideoDashboard = () => {
   const mockVideos = [
@@ -51,7 +53,7 @@ const VideoDashboard = () => {
           MP3. File
         </span>
       ),
-      content: <Medialibrary />,
+      content: <Analytics />,
     },
     {
       id: 1,
