@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { BiAccessibility } from "react-icons/bi";
 import { MenuItems } from './MenuItems';
 import { motion } from "framer-motion"
+import Home from '../routes/Home';
 
 function Navbar() {
   const [clicked, setClicked] = useState(false);
@@ -14,7 +15,11 @@ function Navbar() {
 
   return (
     <nav className="NavbarItems">
-      <h1 className="navbar-logo">makabaka</h1>
+      <div>
+      <div className="navbar-logo">
+        Trans Voxia
+      </div>
+      </div>
       <div className='menu-icons' onClick={handleClick}>
         <i 
           className={clicked ? "fa-solid fa-circle-xmark" : "fa-sharp fa-solid fa-bars"}
