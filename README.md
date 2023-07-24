@@ -13,7 +13,7 @@ The code requires a directory containing the following files:
 - `MainService/`: file containing pages and functions that would be use in the main speech to speech services.
 - `routes/`: Most of the navigating page were located here ( Landing pages ).
 
-An example of this Website is now deployed to Vercel with the Url ([speech-to-speech-theta.vercel.app](https://speech-to-speech-theta.vercel.app/)
+An example of this Website is now deployed to Vercel with the Url ([speech-to-speech-theta.vercel.app](https://speech-to-speech-theta.vercel.app/))
 
 ## Run
 To install dependencies and packages json.:
