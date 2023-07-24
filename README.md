@@ -7,8 +7,8 @@ When a user uploads a foreign language movie, the system temporarily stores the 
 
 ## Prerequisites
 - Install Node.Js (Newest Version will be fine), in advanc ethat you can use Npm. (https://nodejs.org/en/download/current)
-- Need to know that I use both Tail Wind and Css in the project. Hence ,it's important to familiar with both.
-- "react" version : "18.2.0"
+- Must known that I used both TailWind and Css in the project. Hence ,it's important to be familiar with both.
+- Notice that React version should be "react version" : "18.2.0".
 
 ## Data Preparation
 The code requires a directory containing the following files:
