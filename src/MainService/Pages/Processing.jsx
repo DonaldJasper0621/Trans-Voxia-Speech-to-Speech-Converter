@@ -54,6 +54,23 @@ const Processing = () => {
       });
   };
 
+  const handleContinueTaskClick = (taskID) => (events) => {
+    axios
+      .post(`http://140.119.19.16:8001/continue_task/${taskID}/`)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          alert(response.data.msg);
+        } else {
+          alert(response.data.msg);
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+        alert("任務未成功");
+      });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -177,7 +194,7 @@ const Processing = () => {
                           name: "Stop the task",
                           onClick: handleStopTaskClick(video.taskID),
                         },
-                        { name: "Direct Output", onClick: null },
+                        { name: "Direct Output", onClick: handleContinueTaskClick(video.taskID) },
                       ]}
                     ></LongMenu>
                   </div>

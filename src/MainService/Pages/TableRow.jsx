@@ -21,6 +21,27 @@ function TableRow({ data }) {
     }
   };
 
+  function downloadmp4File(url, fileName) {
+    console.log("should download");
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    downloadLink.target = "_blank";
+
+    // Append the link to the DOM (this is required for the download to work in some browsers)
+    document.body.appendChild(downloadLink);
+
+    // Click the link to start the download
+    downloadLink.click();
+
+    // Remove the link (it's not needed anymore)
+    document.body.removeChild(downloadLink);
+  }
+
+  const handleDownloadLink = (event) => {
+    downloadmp4File(data.mp4, data.title);
+  };
+
   const getRequestTime = (requestTime) => {
     const date = new Date(requestTime);
     const year = date.getFullYear();
@@ -77,6 +98,7 @@ function TableRow({ data }) {
               Audio
             </NavLink>
             <NavLink
+              onClick={handleDownloadLink}
               to={"/service/video"}
               target="_blank"
               className="bg-purple-500 text-white px-4 py-2 rounded mr-2 flex items-center"
@@ -99,10 +121,9 @@ function TableRow({ data }) {
             <NavLink
               to={"/service/video"}
               target="_blank"
-              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center"
+              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
             >
-              <IoMdAddCircleOutline className="mr-1" />
-              Video
+              <IoMdAddCircleOutline className="mr-1" /> Video
             </NavLink>
           </>
         )}

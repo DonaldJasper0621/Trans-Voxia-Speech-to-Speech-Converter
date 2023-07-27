@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -15,6 +15,12 @@ import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { green } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import axios from "axios";
+import "./Publish.css";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { createTheme } from '@mui/material/styles';
+
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -79,12 +85,12 @@ function FloatingActionButtonZoom() {
     setTranscript(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (field) => {
+    const new_value = field === "title" ? title : transcript;
 
     try {
       const response = await axios.put(
-        `http://140.119.19.16:8001/tasks/?taskID=18&field=title&new_value=${title}`
+        `http://140.119.19.16:8001/tasks/?taskID=${video.taskID}&field=${field}&new_value=${new_value}`
       );
       console.log(response.data);
     } catch (error) {
@@ -93,6 +99,10 @@ function FloatingActionButtonZoom() {
   };
 
   const handleEditClick = (index) => {
+    if (isEditing[index]) {
+      // if currently editing
+      handleSubmit(index === 0 ? "title" : "transcript"); // submit change
+    }
     let newIsEditing = [...isEditing];
     newIsEditing[index] = !newIsEditing[index];
     setIsEditing(newIsEditing);
@@ -165,7 +175,11 @@ function FloatingActionButtonZoom() {
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
         {isEditing[1] ? (
-          <textarea value={transcript} onChange={handleTranscriptChange} />
+          <textarea
+            style={{ width: "100%", minHeight: "300px" }}
+            value={transcript}
+            onChange={handleTranscriptChange}
+          />
         ) : (
           transcript
         )}
@@ -203,50 +217,139 @@ const EditTranscripts = () => {
   const [title, setTitle] = useState(video.title);
   const [transcript, setTranscript] = useState(video.transcript); // set this to video.transcript if it exists
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState('success');
+
+
+  const handleContinueTaskClick = (taskID) => (events) => {
+    axios
+      .post(`http://140.119.19.16:8001/continue_task/${taskID}/`)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          setTimeout(() => {
+            setAlertType('success');
+            setOpen(true);
+          }, 1000);
+        } else {
+          alert(response.data.msg);
+          setTimeout(() => {
+            setAlertType('error');
+            setOpen(true);
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+        alert("任務未成功");
+        setTimeout(() => {
+          setAlertType('error');
+          setOpen(true);
+        }, 1000);
+      });
+  };
+  
+
+  const [duration, setDuration] = useState(0);
+
+  const success = (button) => {
+    //Success function
+    button.classList.add("success");
   };
 
-  const handleTranscriptChange = (event) => {
-    setTranscript(event.target.value);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await axios.put(
-        `http://140.119.19.16:8001/tasks/?taskID=18&field=title&new_value=${title}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    document.querySelectorAll(".button-hold").forEach((button) => {
+      button.style.setProperty("--duration", duration + "ms");
+      ["mousedown", "touchstart", "keypress"].forEach((e) => {
+        button.addEventListener(e, (ev) => {
+          if (
+            e != "keypress" ||
+            (e == "keypress" &&
+              ev.which == 32 &&
+              !button.classList.contains("process"))
+          ) {
+            button.classList.add("process");
+            button.timeout = setTimeout(success, duration, button);
+          }
+        });
+      });
+      ["mouseup", "mouseout", "touchend", "keyup"].forEach((e) => {
+        button.addEventListener(
+          e,
+          (ev) => {
+            if (e != "keyup" || (e == "keyup" && ev.which == 32)) {
+              button.classList.remove("process");
+              clearTimeout(button.timeout);
+            }
+          },
+          false
+        );
+      });
+    });
+  }, []);
 
   return (
     <div className="flex">
       <Sidebar />
+      <Snackbar
+  open={open}
+  autoHideDuration={1500}
+  onClose={() => setOpen(false)}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+>
+  {alertType === 'success' ? (
+    <Alert severity="success" onClose={() => setOpen(false)}>
+      This is a success alert — check it out!
+    </Alert>
+  ) : (
+    <Alert severity="error" onClose={() => setOpen(false)}>
+      This is an error alert — check it out!
+    </Alert>
+  )}
+</Snackbar>
+
       <div className="container mx-auto px-4 bg-slate-300">
-        <video
-          src={video.mp4 || video.mp3}
-          controls
-          className="max-h-[150px] aspect-video"
-        />
+        <div className="flex items-center">
+          <video
+            src={video.mp4 || video.mp3}
+            controls
+            className="max-h-[150px] aspect-video"
+          />
+          <div className="ml-6 font-light">
+            <div className="text-md font-semibold">{video.title}</div>
+            <p className="text-sm text-gray-600">By {video.target_language}</p>
+            <p>{video.status}</p>
+          </div>
+        </div>
         {/* <form onSubmit={handleSubmit}>
-          <label>
-            Title:
-            <input type="text" value={title} onChange={handleTitleChange} />
-          </label>
-          <label>
-            Transcript:
-            <textarea value={transcript} onChange={handleTranscriptChange} />
-          </label>
-          <button type="submit">
-            Submit
-          </button>
-        </form> */}
+      <label>
+        Title:
+        <input type="text" value={title} onChange={handleTitleChange} />
+      </label>
+      <label>
+        Transcript:
+        <textarea value={transcript} onChange={handleTranscriptChange} />
+      </label>
+      <button type="submit">
+        Submit
+      </button>
+    </form> */}
+    <button className="button-hold " onClick={handleContinueTaskClick(video.taskID)}>
+          <div>
+            <svg class="icon" viewBox="0 0 16 16">
+              <polygon points="1.3,6.7 2.7,8.1 7,3.8 7,16 9,16 9,3.8 13.3,8.1 14.7,6.7 8,0"></polygon>
+            </svg>
+            <svg class="progress" viewBox="0 0 32 32">
+              <circle r="8" cx="16" cy="16" />
+            </svg>
+            <svg class="tick" viewBox="0 0 24 24">
+              <polyline points="18,7 11,16 6,12" />
+            </svg>
+          </div>
+          Publish
+        </button>
         <FloatingActionButtonZoom />
+        
       </div>
     </div>
   );
