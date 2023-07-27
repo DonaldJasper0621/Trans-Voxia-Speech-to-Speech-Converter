@@ -21,7 +21,7 @@ function TableRow({ data }) {
     }
   };
 
-  function downloadmp4File(url, fileName) {
+  function downloadFile(url, fileName) {
     console.log("should download");
     const downloadLink = document.createElement("a");
     downloadLink.href = url;
@@ -38,8 +38,16 @@ function TableRow({ data }) {
     document.body.removeChild(downloadLink);
   }
 
-  const handleDownloadLink = (event) => {
-    downloadmp4File(data.mp4, data.title);
+  const handleDownloadLink = (event, mode) => {
+    event.preventDefault();
+
+    if (mode === "video") {
+      downloadFile(data.mp4, data.title);
+    } else if (mode === "audio") {
+      downloadFile(data.mp3, data.title);
+    } else if (mode === "transcript") {
+      downloadFile(data.transcript, data.title);
+    }
   };
 
   const getRequestTime = (requestTime) => {
@@ -80,6 +88,9 @@ function TableRow({ data }) {
           Download
         </NavLink> */}
         <NavLink
+          onClick={(e) => {
+            handleDownloadLink(e, "transcript");
+          }}
           to={"/service/transcript"}
           target="_blank"
           className="bg-green-500 text-white px-4 py-2 rounded flex items-center mr-2"
@@ -90,6 +101,10 @@ function TableRow({ data }) {
         {data.mode === "video" && (
           <>
             <NavLink
+              onClick={(e) => {
+                e.preventDefault();
+                handleDownloadLink(e, "audio");
+              }}
               to={"/service/audio"}
               target="_blank"
               className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
