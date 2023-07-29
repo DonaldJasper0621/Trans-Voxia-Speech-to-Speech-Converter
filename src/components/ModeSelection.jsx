@@ -18,7 +18,7 @@ function ModeSelection() {
 
   useEffect(() => {
     axios
-      .get("http://140.119.19.16:8001/language/")
+      .get("http://140.119.19.16:8000/language/")
       .then((response) => {
         setLanguageList(response.data);
         setposttargetlanguage(response.data[0].original_language);
@@ -32,7 +32,7 @@ function ModeSelection() {
 
   useEffect(() => {
     axios
-      .get("http://140.119.19.16:8001/voices/")
+      .get("http://140.119.19.16:8000/voices/")
       .then((response) => {
         setVoices(response.data);
         setpostvoice(Object.values(response.data)[0].usable_voices[0]);
@@ -59,7 +59,7 @@ function ModeSelection() {
   // ---------------------------------------------------------------------
   const handleSubmitClick = (events) => {
     axios.postForm(
-      `http://140.119.19.16:8001/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
+      `http://140.119.19.16:8000/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
       {
         file: document.querySelector("#video").files[0],
       },

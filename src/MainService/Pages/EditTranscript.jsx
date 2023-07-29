@@ -89,7 +89,7 @@ function FloatingActionButtonZoom() {
 
     try {
       const response = await axios.put(
-        `http://140.119.19.16:8001/tasks/?taskID=${video.taskID}&field=${field}&new_value=${new_value}`
+        `http://140.119.19.16:8000/tasks/?taskID=${video.taskID}&field=${field}&new_value=${new_value}`
       );
       console.log(response.data);
     } catch (error) {
@@ -222,7 +222,7 @@ const EditTranscripts = () => {
 
   const handleContinueTaskClick = (taskID) => (events) => {
     axios
-      .post(`http://140.119.19.16:8001/continue_task/${taskID}/`)
+      .post(`http://140.119.19.16:8000/continue_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           console.log(response);

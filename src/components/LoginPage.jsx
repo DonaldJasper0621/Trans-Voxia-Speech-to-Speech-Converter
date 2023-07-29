@@ -13,7 +13,7 @@ function LoginPage() {
     events.preventDefault();
     axios
       .post(
-        "http://140.119.19.16:8001/login/",
+        "http://140.119.19.16:8000/login/",
         {
           email: emailRef.current.value,
           password: passwordRef.current.value,

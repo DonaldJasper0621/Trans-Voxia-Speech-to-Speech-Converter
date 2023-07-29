@@ -44,7 +44,7 @@ const Processing = () => {
 
   const handleStopTaskClick = (taskID) => (events) => {
     axios
-      .post(`http://140.119.19.16:8001/stop_task/${taskID}/`)
+      .post(`http://140.119.19.16:8000/stop_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           setTimeout(() => {
@@ -84,9 +84,10 @@ const Processing = () => {
 
   const handleContinueTaskClick = (taskID) => (events) => {
     axios
-      .post(`http://140.119.19.16:8001/continue_task/${taskID}/`)
+      .post(`http://140.119.19.16:8000/continue_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
+          console.log(response);
           setTimeout(() => {
             setAlertConfig({
               severity: "success",
@@ -126,9 +127,9 @@ const Processing = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://140.119.19.16:8001/tasks/?n=10&page=1"
+          "http://140.119.19.16:8000/tasks/?n=10&page=1"
         );
-        setApiData(response.data);
+        setApiData(response.data.results);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

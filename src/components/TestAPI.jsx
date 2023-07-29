@@ -9,7 +9,7 @@ const TestAPI = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://140.119.19.16:8001/api/tasks/download/",
+          "http://140.119.19.16:8000/api/tasks/download/",
           {
             params: { email: "default@example.com", taskID: "54" },
             responseType: "blob",

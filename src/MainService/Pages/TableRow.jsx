@@ -88,9 +88,6 @@ function TableRow({ data }) {
           Download
         </NavLink> */}
         <NavLink
-          onClick={(e) => {
-            handleDownloadLink(e, "transcript");
-          }}
           to={"/service/transcript"}
           target="_blank"
           className="bg-green-500 text-white px-4 py-2 rounded flex items-center mr-2"
@@ -113,7 +110,10 @@ function TableRow({ data }) {
               Audio
             </NavLink>
             <NavLink
-              onClick={handleDownloadLink}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDownloadLink(e, "video");
+              }}
               to={"/service/video"}
               target="_blank"
               className="bg-purple-500 text-white px-4 py-2 rounded mr-2 flex items-center"
@@ -177,23 +177,23 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`http://140.119.19.16:8001/tasks/?n=${PAGE_ITEM}&page=${page}`)
+      .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
       .then((response) => {
-        console.log("1");
-        setTasks((prevTasks) => [...prevTasks, ...response.data]);
+        const completedTasks = response.data.results.filter(task => task.status === "任務完成");
+        setTasks((prevTasks) => [...prevTasks, ...completedTasks]);
       })
       .catch((error) => {
         alert(error);
       });
   }, [page]);
-
+  
   const fetchMoreData = () => {
-    console.log("2");
     axios
-      .get(`http://140.119.19.16:8001/tasks/?n=${PAGE_ITEM}&page=${page}`)
+      .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
       .then((response) => {
-        setTasks((prevTasks) => [...prevTasks, ...response.data]);
-        if (response.data.length < PAGE_ITEM) {
+        const completedTasks = response.data.results.filter(task => task.status === "任務完成");
+        setTasks((prevTasks) => [...prevTasks, ...completedTasks]);
+        if (completedTasks.length < PAGE_ITEM) {
           setHasMore(false);
         } else {
           setPage((prevPage) => prevPage + 1);
