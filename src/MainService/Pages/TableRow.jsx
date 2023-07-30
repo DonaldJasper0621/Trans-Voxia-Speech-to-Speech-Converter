@@ -167,7 +167,7 @@ function TableRow({ data }) {
   );
 }
 
-// Example usage of TableRow component
+// Example usage of TableRow componentttt
 // Example usage of TableRow component
 const PAGE_ITEM = 100;
 function App() {
