@@ -7,6 +7,9 @@ import "../components/tailwind-alerts.css";
 import axios from "axios";
 import { data } from "autoprefixer";
 import qs from "qs";
+import { useNavigate } from 'react-router-dom';
+import HashLoader from "react-spinners/HashLoader";
+
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -15,6 +18,9 @@ function ModeSelection() {
     length: "",
     location: "",
   });
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     axios
@@ -57,7 +63,8 @@ function ModeSelection() {
     setpostvoice(events.target.value);
   };
   // ---------------------------------------------------------------------
-  const handleSubmitClick = (events) => {
+  const handleSubmitClick = (events) => {    
+    setLoading(true);
     axios.postForm(
       `http://140.119.19.16:8000/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
       {
@@ -71,8 +78,18 @@ function ModeSelection() {
             "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
         },
       }
-    );
+    ).then(() => {
+      // after 2 seconds, stop the loading spinner and redirect to /service/processing
+      setTimeout(() => {
+        setLoading(false);
+        navigate('/service/processing');
+      }, 3000);
+    }).catch((error) => {
+      setLoading(false);
+      alert(error);
+    });
   };
+  
 
   const [posttargetlanguage, setposttargetlanguage] = useState("");
   const [postvoice, setpostvoice] = useState("");
@@ -146,6 +163,11 @@ function ModeSelection() {
 
   return (
     <div className="w-full overflow-scroll h-screen">
+       {loading && (
+        <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
+          <HashLoader color="#36d7b7" size={150} />
+        </div>
+      )}
       <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-green-500 to-indigo-800">
         <span>
           You have <strong>15</strong> minutes &amp; <strong>10</strong> free
