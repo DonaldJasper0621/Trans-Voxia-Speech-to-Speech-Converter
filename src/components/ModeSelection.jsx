@@ -7,9 +7,9 @@ import "../components/tailwind-alerts.css";
 import axios from "axios";
 import { data } from "autoprefixer";
 import qs from "qs";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
-
+import Tooltip from "@mui/material/Tooltip";
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -20,7 +20,6 @@ function ModeSelection() {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     axios
@@ -63,33 +62,35 @@ function ModeSelection() {
     setpostvoice(events.target.value);
   };
   // ---------------------------------------------------------------------
-  const handleSubmitClick = (events) => {    
+  const handleSubmitClick = (events) => {
     setLoading(true);
-    axios.postForm(
-      `http://140.119.19.16:8000/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
-      {
-        file: document.querySelector("#video").files[0],
-      },
-      {
-        headers: {
-          "content-type": "multipart/form-data",
-          Cookie: `transvoxia-auth=${sessionStorage.getItem("key")};`,
-          "X-CSRFToken":
-            "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
+    axios
+      .postForm(
+        `http://140.119.19.16:8000/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
+        {
+          file: document.querySelector("#video").files[0],
         },
-      }
-    ).then(() => {
-      // after 2 seconds, stop the loading spinner and redirect to /service/processing
-      setTimeout(() => {
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            Cookie: `transvoxia-auth=${sessionStorage.getItem("key")};`,
+            "X-CSRFToken":
+              "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
+          },
+        }
+      )
+      .then(() => {
+        // after 2 seconds, stop the loading spinner and redirect to /service/processing
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/service/processing");
+        }, 3000);
+      })
+      .catch((error) => {
         setLoading(false);
-        navigate('/service/processing');
-      }, 3000);
-    }).catch((error) => {
-      setLoading(false);
-      alert(error);
-    });
+        alert(error);
+      });
   };
-  
 
   const [posttargetlanguage, setposttargetlanguage] = useState("");
   const [postvoice, setpostvoice] = useState("");
@@ -122,6 +123,7 @@ function ModeSelection() {
 
   const handleVideoChange = (e) => {
     setVideoFile(e.target.files[0]);
+    setposttitle(e.target.files[0].name.split(".")[0]);
   };
 
   const showAlert = () => {
@@ -163,7 +165,7 @@ function ModeSelection() {
 
   return (
     <div className="w-full overflow-scroll h-screen">
-       {loading && (
+      {loading && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
           <HashLoader color="#36d7b7" size={150} />
         </div>
@@ -203,7 +205,14 @@ function ModeSelection() {
           </div>
           <div className="ml-6 font-light">
             <p>
-              <strong>Name:</strong> {videoMetadata.name}
+              <strong>Name:</strong>
+              <Tooltip title="Rename Title">
+              <input
+                value={posttitle}
+                onChange={(e) => setposttitle(e.target.value)}
+                placeholder="Type video name here"
+              />
+              </Tooltip>
             </p>
             <p>
               <strong>Length:</strong> {videoMetadata.length}

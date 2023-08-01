@@ -136,7 +136,15 @@ const Processing = () => {
     };
 
     fetchData();
-  }, []);
+
+    // Fetch new data every 10 seconds (10000 milliseconds)
+    const timerId = setInterval(fetchData, 10000);
+
+    return () => {
+      // Clean up the interval when the component is unmounted
+      clearInterval(timerId);
+    };
+}, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
