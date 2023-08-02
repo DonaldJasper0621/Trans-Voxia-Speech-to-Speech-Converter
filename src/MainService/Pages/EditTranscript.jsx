@@ -16,11 +16,10 @@ import { green } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import "./Publish.css";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { createTheme } from '@mui/material/styles';
-import { styled } from '@mui/system';
-
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+import HashLoader from "react-spinners/HashLoader";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -213,13 +212,14 @@ function FloatingActionButtonZoom() {
 const EditTranscripts = () => {
   const location = useLocation();
   const video = location.state.video;
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState(video.title);
   const [transcript, setTranscript] = useState(video.transcript); // set this to video.transcript if it exists
 
   const [open, setOpen] = useState(false);
-  const [alertType, setAlertType] = useState('success');
-
+  const [alertType, setAlertType] = useState("success");
 
   const handleContinueTaskClick = (taskID) => (events) => {
     axios
@@ -228,14 +228,16 @@ const EditTranscripts = () => {
         if (response.status === 200) {
           console.log(response);
           setTimeout(() => {
-            setAlertType('success');
+            setAlertType("success");
             setOpen(true);
-          }, 1000);
-        } else {
-          alert(response.data.msg);
-          setTimeout(() => {
-            setAlertType('error');
-            setOpen(true);
+            setTimeout(() => {
+              // Start loading
+              setLoading(true);
+              // Navigate to the specified page with a 2-second delay for the loader
+              setTimeout(() => {
+                navigate("/service/processing");
+              }, 2000);
+            }, 1000);
           }, 1000);
         }
       })
@@ -243,12 +245,11 @@ const EditTranscripts = () => {
         console.log(error.response);
         alert("任務未成功");
         setTimeout(() => {
-          setAlertType('error');
+          setAlertType("error");
           setOpen(true);
         }, 1000);
       });
   };
-  
 
   const [duration, setDuration] = useState(0);
 
@@ -291,22 +292,27 @@ const EditTranscripts = () => {
   return (
     <div className="flex">
       <Sidebar />
+      {loading && (
+        <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
+          <HashLoader color="#36d7b7" size={150} />
+        </div>
+      )}
       <Snackbar
-  open={open}
-  autoHideDuration={1500}
-  onClose={() => setOpen(false)}
-  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
->
-  {alertType === 'success' ? (
-    <Alert severity="success" onClose={() => setOpen(false)}>
-      This is a success alert — check it out!
-    </Alert>
-  ) : (
-    <Alert severity="error" onClose={() => setOpen(false)}>
-      This is an error alert — check it out!
-    </Alert>
-  )}
-</Snackbar>
+        open={open}
+        autoHideDuration={1500}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        {alertType === "success" ? (
+          <Alert severity="success" onClose={() => setOpen(false)}>
+            This is a success alert — check it out!
+          </Alert>
+        ) : (
+          <Alert severity="error" onClose={() => setOpen(false)}>
+            This is an error alert — check it out!
+          </Alert>
+        )}
+      </Snackbar>
 
       <div className="container mx-auto px-4 bg-slate-300">
         <div className="flex items-center">
@@ -334,7 +340,10 @@ const EditTranscripts = () => {
         Submit
       </button>
     </form> */}
-    <button className="button-hold " onClick={handleContinueTaskClick(video.taskID)}>
+        <button
+          className="button-hold "
+          onClick={handleContinueTaskClick(video.taskID)}
+        >
           <div>
             <svg class="icon" viewBox="0 0 16 16">
               <polygon points="1.3,6.7 2.7,8.1 7,3.8 7,16 9,16 9,3.8 13.3,8.1 14.7,6.7 8,0"></polygon>
@@ -349,7 +358,6 @@ const EditTranscripts = () => {
           Publish
         </button>
         <FloatingActionButtonZoom />
-        
       </div>
     </div>
   );
