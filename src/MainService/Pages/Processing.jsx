@@ -200,74 +200,80 @@ const Processing = () => {
           </Snackbar>
           <Fade in={open} timeout={500}>
             <div className="w-full overflow-scroll h-screen">
-              <div className="container mx-auto px-4">
-                <div className="mb-8">
-                  <h1 className="text-xl font-bold">
+              <div className="container mx-auto px-4 py-6">
+                <div className="mb-8"> 
+                  <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold"> 
                     Direct Output Without Editing Transcripts
                   </h1>
+                  <hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
 
                   <div className="grid grid-cols-1 gap-4 mt-4">
                     {directVideos.map((video) => (
                       <div
                         key={video.taskID}
-                        className="shadow-lg rounded-md p-4 flex"
+                        className="shadow-lg rounded-md p-4 h-[150px] flex"
                       >
-                        <div className="rounded-lg overflow-hidden border border-slate-900 ring-4 ring-slate-400 focus:ring-opacity-50">
+                        <div className="rounded-lg ring-2 ring-slate-300 focus:ring-opacity-50 hover:ring-slate-600">
                           <video
                             src={video.mp4 || video.mp3}
                             controls
-                            className="max-h-[150px] aspect-video"
+                            className="rounded-lg max-h-[120px] max-w-[210px] aspect-video"
                           />
                         </div>
-                        <div className="ml-6 font-light">
-                          <div className="text-md font-semibold">
+                        <div className="ml-6 flex-auto">
+                          <div className="text-md text-left font-semibold py-2">
                             {video.title}
                           </div>
-                          <p className="text-sm text-gray-600">
-                            By {video.target_language}
-                          </p>
-                          <p>{video.status}</p>
+                          <p className="text-sm text-left text-gray-600 font-serif italic">
+                            By {video.target_language} 
+                          </p> 
                         </div>
-                        <LongMenu
-                          options={[
+                        <div className="object-right-top flex justify-between py-4">
+                        <p className="flex h-3 items-center text-md text-zinc-700">{video.status}
+                          <LongMenu
+                            options={[
                             {
-                              name: "Stop the task",
+                              name:"Stop the task",
                               onClick: handleStopTaskClick(video.taskID),
-                            },
-                          ]}
-                        ></LongMenu>
+                            }, 
+                            ]}
+                            className="flex"
+                        />
+                        </p>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h1 className="text-xl font-bold">
+                  <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold">
                     Output Videos That Transcripts Needed To Be Edited
-                  </h1>
+                  </h1><hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
                   <div className="grid grid-cols-1 gap-4 mt-4">
                     {editVideos.map((video) => (
                       <div
                         key={video.taskID}
                         className="shadow-lg rounded-md p-4 flex"
                       >
-                        <div className="rounded-lg overflow-hidden border border-slate-900 ring-4 ring-slate-400 focus:ring-opacity-50">
+                        <div className="rounded-lg ring-2 ring-slate-300 focus:ring-opacity-50 hover:ring-slate-600">
                           <video
                             src={video.mp4 || video.mp3}
                             controls
-                            className="max-h-[150px] aspect-video"
+                            className="rounded-lg max-h-[120px] max-w-[210px] aspect-video"
                           />
                         </div>
-                        <div className="ml-6 font-light">
-                          <div className="text-md font-semibold">
+                        <div className="ml-6 flex-auto">
+                          <div className="text-md text-left font-semibold py-2">
                             {video.title}
                           </div>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-left text-gray-600 font-serif italic">
                             By {video.target_language}
                           </p>
-                          <p>{video.status}</p>
+                          
                         </div>
-
+                        <div className="object-right-top flex justify-between py-4">
+                        <p className="flex h-3 items-center text-md text-zinc-700">{video.status}
                         <LongMenu
                           options={[
                             {
@@ -284,7 +290,10 @@ const Processing = () => {
                               onClick: handleContinueTaskClick(video.taskID),
                             },
                           ]}
-                        ></LongMenu>
+                          className="flex"
+                        />
+                        </p>
+                        </div>
                       </div>
                     ))}
                   </div>

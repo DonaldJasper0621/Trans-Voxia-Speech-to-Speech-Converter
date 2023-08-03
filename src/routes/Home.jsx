@@ -34,7 +34,7 @@ function Home() {
       <LandingPage />
       <LandingPage2 />
       <div>
-        <h1 className="title">Take a quick tour of Makabaka</h1>
+        <h1 className="title">Take a quick tour of Trans Voxia</h1>
         <div className="subtitle">
           Watch this video to learn all about our AI voice technology and how to
           use it in your products
