@@ -58,6 +58,7 @@ function TableRow({ data }) {
 
     return `${year}-${month}-${day}`;
   };
+  
 
   return (
     <div className="text-center border-b border-gray-200 flex py-8 pl-7 w-full">
