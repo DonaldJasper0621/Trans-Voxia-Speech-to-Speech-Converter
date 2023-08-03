@@ -5,7 +5,7 @@ const Footer = () =>{
         <div className="footer">
             <div className="top">
                 <div>
-                    <h1>MAKABAKA</h1>
+                    <h1>Trans Voxia</h1>
                     <p> Speech to Speech</p>
                 </div>
                 <div>

@@ -7,7 +7,7 @@ const LandingPage = () => {
     <div className="destination">
       <h1 className=" text-2xl mt-56 mb-6 body-font font-poppins font-semibold ">
         {" "}
-        Take a Quick Tour of Makabaka
+        Take a Quick Tour of Trans voxia
       </h1>
       <p className=" text-2xl mb-14 ">
         Watch this video to learn all about our AI voice technology and how to
