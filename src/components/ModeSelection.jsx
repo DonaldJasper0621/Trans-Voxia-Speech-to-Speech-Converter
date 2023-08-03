@@ -113,10 +113,23 @@ function ModeSelection() {
     if (videoFile) {
       const url = URL.createObjectURL(videoFile);
       setposttitle(videoFile.name.split(".")[0]);
-      setVideoMetadata({
-        name: videoFile.name,
-        length: videoFile.duration,
-        location: url,
+  
+      // Create a video element to get the duration
+      const videoElement = document.createElement('video');
+      videoElement.src = url;
+  
+      videoElement.addEventListener('loadedmetadata', () => {
+        const durationInSeconds = videoElement.duration;
+        const minutes = Math.floor(durationInSeconds / 60);
+        const seconds = Math.floor(durationInSeconds % 60);
+  
+        const length = `${minutes} minutes ${seconds} seconds`;
+  
+        setVideoMetadata({
+          name: videoFile.name,
+          length: length,
+          location: url,
+        });
       });
     }
   }, [videoFile]);

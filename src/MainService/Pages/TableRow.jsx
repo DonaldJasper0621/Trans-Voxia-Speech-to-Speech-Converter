@@ -68,10 +68,10 @@ function TableRow({ data }) {
         <div className="w-full flex items-center">
           {/* Render the appropriate icon based on the data type */}
           {getFileIcon(data.mode)}
-          <div className="text-sm mt-2 ml-4 flex overflow-hidden ">
-            <p>{data.title}</p>
-            <p>{data.targetlanguage}</p>
-            <p>{data.voice_selection}</p>
+          <div className="text-s mt-1 ml-4 flex overflow-hidden ">
+            <p className="mr-2">{data.title}</p>
+            <p className="">/{data.targetlanguage}</p>
+            <p className="mr-2">{data.voice_selection}/</p>
             <p>{getRequestTime(data.request_time)}</p>
           </div>
         </div>
