@@ -10,6 +10,7 @@ import qs from "qs";
 import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
 import Tooltip from "@mui/material/Tooltip";
+import './bgStyles.css'
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -183,7 +184,7 @@ function ModeSelection() {
           <HashLoader color="#36d7b7" size={150} />
         </div>
       )}
-      <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-green-500 to-indigo-800">
+      <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 background-animate">
         <span>
           You have <strong>15</strong> minutes &amp; <strong>10</strong> free
           downloads remaining. Upgrade for more minutes, unlimited access to

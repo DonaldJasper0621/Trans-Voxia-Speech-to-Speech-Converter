@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineFolderOpen } from "react-icons/ai";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
-import { MdOutlineVideoLibrary, MdOutlineDescription } from "react-icons/md";
+import { MdOutlineMap,MdOutlineMovieFilter, MdOutlineHeadphones, MdOutlineDescription } from "react-icons/md";
 import { FaRegFileAudio } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Processing from "../MainService/Pages/Processing";
@@ -13,6 +13,8 @@ import TableRow from "../MainService/Pages/TableRow";
 import { Fade } from "@mui/material";
 import { Analytics } from "@mui/icons-material";
 import axios from "axios";
+import { bgcolor } from "@mui/system";
+import './bgStyles.css'
 
 const VideoDashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -90,20 +92,20 @@ const VideoDashboard = () => {
   const tabs = [
     {
       id: 3,
-      icon: <MdOutlineDescription className="mr-2" size={25} />,
+      icon: <MdOutlineMap className="mr-2 fill-slate-600" size={24} />,
       label: (
-        <span className=" font-semibold text-lg text-slate-500 ">
-          File Overview
+        <span className="font-semibold text-lg text-slate-500">
+          All
         </span>
       ),
       content: <TableRow />,
     },
     {
       id: 2,
-      icon: <FaRegFileAudio className="mr-2" size={25} />,
+      icon: <MdOutlineHeadphones className="mr-2 fill-slate-600" size={24} />,
       label: (
         <span className=" font-semibold text-lg text-slate-500 ">
-          MP3. File
+          MP3
         </span>
       ),
       content: (
@@ -129,10 +131,10 @@ const VideoDashboard = () => {
     },
     {
       id: 1,
-      icon: <MdOutlineVideoLibrary className="mr-2" size={25} />,
+      icon: <MdOutlineMovieFilter className="mr-2 fill-slate-600" size={24} />,
       label: (
         <span className=" font-semibold text-lg text-slate-500 ">
-          MP4. File
+          MP4
         </span>
       ),
       content: (
@@ -171,7 +173,7 @@ const VideoDashboard = () => {
   return (
     <Fade in={open} timeout={500}>
       <div className="w-full overflow-scroll h-screen">
-        <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-green-500 to-indigo-800">
+        <div className="flex-auto top-0 left-0 right-0 z-50 w-full h-12 py-3 text-center text-sm leading-5 whitespace-nowrap text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 background-animate">
           <span>
             You have <strong>15</strong> minutes &amp; <strong>10</strong> free
             downloads remaining. Upgrade for more minutes, unlimited access to
@@ -180,15 +182,13 @@ const VideoDashboard = () => {
           <a
             target="_blank"
             href="../About"
-            className="ant-btn upgrade-button ant-btn-sm ant-btn-background-ghost"
+            className="ant-btn upgrade-button ant-btn-sm"
           >
-            <span>Upgrade</span>
+            <span><button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current "> Upgrade</button></span>
           </a>
         </div>
 
-        <div className=" flex items-center w- py-8  ml-9">
-          <AiOutlineFolderOpen className="mr-2" size={30} />
-          <span className=" text-2xl font-bold text-slate-500">Files</span>
+        <div className=" flex items-center w- py-3  ml-9">
         </div>
 
         <Tabs tabs={tabs} />

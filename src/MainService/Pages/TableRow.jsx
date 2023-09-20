@@ -1,7 +1,7 @@
 import { AiOutlineFolderOpen } from "react-icons/ai";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
-import { MdOutlineVideoLibrary, MdOutlineDescription } from "react-icons/md";
+import { MdOutlineHeadphones,MdOutlineMovieFilter,MdOutlineVideoLibrary, MdOutlineDescription } from "react-icons/md";
 import { FaRegFileAudio } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useState } from "react";
@@ -11,11 +11,11 @@ import axios from "axios";
 function TableRow({ data }) {
   const getFileIcon = (mode) => {
     if (mode === "video") {
-      return <MdOutlineVideoLibrary className="mr-1 h-6 w-6" />;
+      return <MdOutlineVideoLibrary className="mr-1" size={32} />;
     } else if (mode === "audio") {
-      return <FaRegFileAudio className="mr-1 h-6 w-6" />;
+      return <FaRegFileAudio className="mr-1 " size={32} />;
     } else if (mode === "transcript") {
-      return <AiOutlineFolderOpen className="mr-1 h-6 w-6" />;
+      return <AiOutlineFolderOpen className="mr-1 " size={32} />;
     } else {
       return null;
     }
@@ -61,23 +61,26 @@ function TableRow({ data }) {
   
 
   return (
-    <div className="text-center border-b border-gray-200 flex py-8 pl-7 w-full">
-      <div className="flex py-3">
+    <div className="ml-6 mr-6 border-b border-gray-200 flex py-5 pl-7 w-auto">
+      <div className="flex py-3 mr-6 items-center">
         <input type="checkbox" className="mx-auto h-4 w-4" />
       </div>
       <div className="flex mr-auto">
-        <div className="w-full flex items-center">
+        <div className="flex items-center">
           {/* Render the appropriate icon based on the data type */}
           {getFileIcon(data.mode)}
-          <div className="text-s mt-1 ml-4 flex overflow-hidden ">
-            <p className="mr-2">{data.title}</p>
-            <p className="">/{data.targetlanguage}</p>
-            <p className="mr-2">{data.voice_selection}/</p>
-            <p>{getRequestTime(data.request_time)}</p>
-          </div>
+        </div>
+        <div className="text-left ml-6 flex-col overflow-hidden">
+            <h3 className="font-bold font-sans text-lg">{data.title}</h3>
+            <p className="text-xs text-zinc-400">{data.targetlanguage}</p>
+            <p className="text-xs text-zinc-400">{data.voice_selection}</p>
         </div>
       </div>
-      <div className="flex items-end justify-end mr-6">
+      <div className="flex justify-end mr-2">
+        <div className="mt-7 flex">
+          <p className="text-xs text-zinc-400 font-sans">created :{getRequestTime(data.request_time)}</p>
+        </div>
+        <div className="flex justify-end items-center min-w-[220px]">
         {" "}
         {/* Use flexbox with justify-between */}
         {/* <NavLink
@@ -91,10 +94,10 @@ function TableRow({ data }) {
         <NavLink
           to={"/service/transcript"}
           target="_blank"
-          className="bg-green-500 text-white px-4 py-2 rounded flex items-center mr-2"
+          className="btn bg-slate-200 shadow-md rounded-full py-2 px-2 flex items-center mr-4 hover:bg-emerald-100"
         >
-          <MdOutlineVideoLibrary />
-          Transcript
+          <MdOutlineDescription className=" fill-emerald-500 justify-center hover:fill-emerald-600" size={21} /><span className=" text-emerald-600"> Transcript</span>
+          
         </NavLink>
         {data.mode === "video" && (
           <>
@@ -105,10 +108,10 @@ function TableRow({ data }) {
               }}
               to={"/service/audio"}
               target="_blank"
-              className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
+              className="btn  bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center hover:bg-sky-100"
             >
-              <FaRegFileAudio className="mr-1" />
-              Audio
+              <MdOutlineHeadphones className=" fill-sky-600 justify-center hover:fill-sky-800" size={21}/><span className=" text-sky-600 ">  Audio</span>
+              
             </NavLink>
             <NavLink
               onClick={(e) => {
@@ -117,29 +120,33 @@ function TableRow({ data }) {
               }}
               to={"/service/video"}
               target="_blank"
-              className="bg-purple-500 text-white px-4 py-2 rounded mr-2 flex items-center"
+              className="btn bg-slate-200 shadow-md rounded-full px-2 py-2 flex items-center hover:bg-violet-100"
             >
-              <IoMdAddCircleOutline className="mr-1" />
-              Video
+              <MdOutlineMovieFilter className=" fill-violet-600 justify-items-center"  size={21}/><span className=" text-violet-600"> Video</span>
+              
             </NavLink>
           </>
         )}
         {data.mode === "audio" && (
           <>
             <NavLink
+              onClick={(e) => {
+                e.preventDefault();
+                handleDownloadLink(e, "audio");
+              }}
               to={"/service/audio"}
               target="_blank"
-              className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
+              className=" btn  bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center hover:bg-sky-100"
             >
-              <FaRegFileAudio className="mr-1" />
-              Audio
+              <MdOutlineHeadphones className=" fill-sky-600 justify-center hover:fill-sky-800" size={21}/><span className=" text-sky-600 ">  Audio</span>
+              
             </NavLink>
             <NavLink
               to={"/service/video"}
               target="_blank"
-              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+              className=" bg-transparent shadow-none px-2 py-2 rounded-full flex items-center pointer-events-none"
             >
-              <IoMdAddCircleOutline className="mr-1" /> Video
+              <MdOutlineMovieFilter className=" fill-transparent" size={21} />
             </NavLink>
           </>
         )}
@@ -148,21 +155,20 @@ function TableRow({ data }) {
             <NavLink
               to="/audio"
               target="_blank"
-              className="bg-red-200 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+              className="bg-transparent shadow-none px-2 py-2 rounded-full mr-4 flex items-center pointer-events-none"
             >
-              <FaRegFileAudio className="mr-1" />
-              Audio
+              <MdOutlineHeadphones className=" fill-transparent" size={21} />
             </NavLink>
             <NavLink
               to={"/service/video"}
               target="_blank"
-              className="bg-purple-300 text-white px-4 py-2 rounded mr-2 flex items-center pointer-events-none"
+              className=" bg-transparent shadow-none px-2 py-2 rounded-full flex items-center pointer-events-none"
             >
-              <IoMdAddCircleOutline className="mr-1" />
-              Video
+              <MdOutlineMovieFilter className=" fill-transparent" size={21} />
             </NavLink>
           </>
         )}
+        </div>
       </div>
     </div>
   );
