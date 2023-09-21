@@ -58,7 +58,6 @@ function TableRow({ data }) {
 
     return `${year}-${month}-${day}`;
   };
-  
 
   return (
     <div className="text-center border-b border-gray-200 flex py-8 pl-7 w-full">
@@ -127,6 +126,10 @@ function TableRow({ data }) {
         {data.mode === "audio" && (
           <>
             <NavLink
+              onClick={(e) => {
+                e.preventDefault();
+                handleDownloadLink(e, "audio");
+              }}
               to={"/service/audio"}
               target="_blank"
               className="bg-red-500 text-white px-4 py-2 rounded mr-2 flex items-center"
@@ -180,19 +183,23 @@ function App() {
     axios
       .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
       .then((response) => {
-        const completedTasks = response.data.results.filter(task => task.status === "任務完成");
+        const completedTasks = response.data.results.filter(
+          (task) => task.status === "任務完成"
+        );
         setTasks((prevTasks) => [...prevTasks, ...completedTasks]);
       })
       .catch((error) => {
         alert(error);
       });
   }, [page]);
-  
+
   const fetchMoreData = () => {
     axios
       .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
       .then((response) => {
-        const completedTasks = response.data.results.filter(task => task.status === "任務完成");
+        const completedTasks = response.data.results.filter(
+          (task) => task.status === "任務完成"
+        );
         setTasks((prevTasks) => [...prevTasks, ...completedTasks]);
         if (completedTasks.length < PAGE_ITEM) {
           setHasMore(false);

@@ -3,7 +3,7 @@ import Sidebar from "../Sidebar/Sidebar";
 
 const Transcripts = () => {
   return (
-    <div className="flex">
+    <div className=" overflow-scroll h-screen w-full">
       <Sidebar />
     </div>
   );

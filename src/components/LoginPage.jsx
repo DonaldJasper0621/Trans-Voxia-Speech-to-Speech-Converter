@@ -35,7 +35,7 @@ function LoginPage() {
           document.cookie +=
             "transvoxia-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg5NjgyNzE4LCJpYXQiOjE2ODk2ODI0MTgsImp0aSI6IjcwOGUxZjViZmVhYzRkYTA4OGRiMTQxZWY2NjE4MTk3IiwidXNlcl9pZCI6OX0.0YdUDrss4VAeFdtXVSDxFpgJDQtpxMmNieT56favuQs;";
           setLoading(true); // Set loading state to true
-          setTimeout(() => navigate("/service/medialibrary"), 2000); // Navigate after 2 seconds
+          setTimeout(() => navigate("/service/medialibrary"), 3000); // Navigate after 2 seconds
         }
       })
       .catch(function (error) {
@@ -70,7 +70,7 @@ function LoginPage() {
               <div className="inputbox">
                 <ion-icon name="mail-outline"></ion-icon>
                 <input type="email" required ref={emailRef} />
-                <label>Email</label>
+                <label>Username</label>
               </div>
               <div className="inputbox">
                 <ion-icon name="lock-closed-outline"></ion-icon>
