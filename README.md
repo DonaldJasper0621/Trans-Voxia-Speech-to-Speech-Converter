@@ -17,6 +17,9 @@ At present, the official Trans Voxia can have three types of output: translated 
 
 When a user uploads a foreign language movie, the system temporarily stores the movie file  and then separates the audio track from the movie content. Through whisper, the content of the audio track will be output as a foreign language verbatim script. Then, through deepL, the foreign language content will be translated into the specified text. And then, through ChatGPT, the content will be refined or interpreted with the specified expectation. Through play.ht, the translated content is presented with the specified human voice. Since the length of the translated text and the AI speed are not the same as the original movie, we will first output the first version of the audio track, divide it by the length of the original movie to get the time multiplier, and then generate the second version of the audio track with the correct timeline. Finally, we merge the audio track with the movie and output the file.
 
+## 🎥 Demo Video
+[![Trans Voxia System Demo](https://img.youtu.be/pgjnm0l_Zvw?si=6JliGlNwmUEITGm-.jpg)](https://youtu.be/pgjnm0l_Zvw?si=6JliGlNwmUEITGm-)
+
 ##  Prerequisites
 - Install Node.Js (Newest Version will be fine) so that you can use Npm. (https://nodejs.org/en/download/current)
 - Must know that I used both TailWind and CSS in the project. Hence, it's essential to be familiar with both.
