@@ -1,3 +1,4 @@
+import qs from "qs";
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
@@ -65,56 +66,18 @@ const fabGreenStyle = {
   },
 };
 
-function FloatingActionButtonZoom() {
-  const theme = useTheme();
-  const [value, setValue] = React.useState(0);
-
-  const location = useLocation();
-  const video = location.state.video;
-
-  const [title, setTitle] = useState(video.title);
-  const [transcript, setTranscript] = useState(video.transcript); // set this to video.transcript if it exists
-  const [isEditing, setIsEditing] = useState([false, false]);
-
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const handleTranscriptChange = (event) => {
-    setTranscript(event.target.value);
-  };
-
-  const handleSubmit = async (field) => {
-    const new_value = field === "title" ? title : transcript;
-
-    try {
-      const response = await axios.put(
-        `http://140.119.19.16:8000/tasks/?taskID=${video.taskID}&field=${field}&new_value=${new_value}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleEditClick = (index) => {
-    if (isEditing[index]) {
-      // if currently editing
-      handleSubmit(index === 0 ? "title" : "transcript"); // submit change
-    }
-    let newIsEditing = [...isEditing];
-    newIsEditing[index] = !newIsEditing[index];
-    setIsEditing(newIsEditing);
-  };
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
-
+function FloatingActionButtonZoom({
+  value,
+  formattedTitleForDisplay,
+  formattedTransForDisplay,
+  handleTitleChange,
+  handleTranscriptChange,
+  handleEditClick,
+  handleChange,
+  theme,
+  isEditing,
+  handleChangeIndex,
+}) {
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen,
@@ -161,26 +124,35 @@ function FloatingActionButtonZoom() {
           variant="fullWidth"
           aria-label="action tabs example"
         >
-          <Tab label="File Title" {...a11yProps(0)} />
-          <Tab label="Transcript" {...a11yProps(1)} />
+          <Tab label="Original Transcript" {...a11yProps(0)} />
+          <Tab label="Translated Transcript" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
         {isEditing[0] ? (
-          <input type="text" value={title} onChange={handleTitleChange} />
+          <textarea
+            style={{ width: "100%", minHeight: "300px" }}
+            value={formattedTitleForDisplay}
+            onChange={handleTitleChange}
+          />
         ) : (
-          title
+          formattedTitleForDisplay
+            .split("\n")
+            .map((line, index) => <p key={index}>{line}</p>)
         )}
       </TabPanel>
+
       <TabPanel value={value} index={1} dir={theme.direction}>
         {isEditing[1] ? (
           <textarea
             style={{ width: "100%", minHeight: "300px" }}
-            value={transcript}
+            value={formattedTransForDisplay}
             onChange={handleTranscriptChange}
           />
         ) : (
-          transcript
+          formattedTransForDisplay
+            .split("\n")
+            .map((line, index) => <p key={index}>{line}</p>)
         )}
       </TabPanel>
       {fabs.map((fab, index) => (
@@ -215,15 +187,160 @@ const EditTranscripts = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState(video.title);
-  const [transcript, setTranscript] = useState(video.transcript); // set this to video.transcript if it exists
-
   const [open, setOpen] = useState(false);
   const [alertType, setAlertType] = useState("success");
 
-  const handleContinueTaskClick = (taskID) => (events) => {
+  const theme = useTheme();
+  const [value, setValue] = React.useState(0);
+
+  const [istranscripttype, setistranscripttype] = useState(
+    "original_transcript"
+  );
+
+  const extractedTranscript = video.transcript.map((item) => {
+    const [first, second, third, fourth, fifth] = item;
+    return [first, second, third, fourth, fifth];
+  });
+
+  const extractedTransTranscript = video.transcript.map((item) => {
+    const [first, second, third, fourth, fifth] = item; // Notice the double comma before fifth
+    return [first, second, third, fourth, fifth];
+  });
+
+  const [title, setTitle] = useState(extractedTranscript);
+  const [transcript, setTranscript] = useState(extractedTransTranscript);
+
+  const formatTitleForDisplay = (titleArray) => {
+    return titleArray
+      .map((item) => {
+        // Take only the first four items of each entry
+        const [first, second, third, fourth] = item;
+        return [first, second, third, fourth].join(",");
+      })
+      .join("\n");
+  };
+
+  const formatTransForDisplay = (transArray) => {
+    return transArray
+      .map((item) => {
+        const [first, second, third, , fifth] = item;
+        return [first, second, third, , fifth].join(",");
+      })
+      .join("\n");
+  };
+
+  const formattedTitleForDisplay = formatTitleForDisplay(title);
+  const formattedTransForDisplay = formatTransForDisplay(transcript);
+
+  // set this to video.transcript if it exists
+  const [isEditing, setIsEditing] = useState([false, false]);
+
+  const handleTitleChange = (event) => {
+    // Split the input by newline to get each line
+    const lines = event.target.value.split("\n");
+
+    // Convert each line back into an array
+    const updatedTitle = lines.map((line) => line.split(","));
+
+    setTitle(updatedTitle);
+  };
+
+  const handleTranscriptChange = (event) => {
+    // Split the input by newline to get each line
+    const lines = event.target.value.split("\n");
+
+    // Convert each line back into an array
+    const updatedTrans = lines.map((line) => line.split(","));
+
+    setTranscript(updatedTrans);
+  };
+  // const handleSubmit = async (field) => {
+  //   const new_value = field === "original_transcript" ? title : transcript;
+
+  //   try {
+  //     const response = await axios.put(
+  //       `http://140.119.19.16:8000/tasks/?taskID=${video.taskID}&field=${field}&new_value=${new_value}`
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const handleEditClick = (index) => {
+    if (isEditing[index]) {
+      // if currently editing
+      handleSubmit(index === 0 ? "original_transcript" : "modified_transcript"); // submit change
+    }
+    let newIsEditing = [...isEditing];
+    newIsEditing[index] = !newIsEditing[index];
+    setIsEditing(newIsEditing);
+  };
+  const handleChange = (event, newValue) => {
+    console.log(newValue);
+    setValue(newValue);
+    if (newValue === 0) {
+      setistranscripttype("original_transcript");
+    }
+    if (newValue === 1) {
+      setistranscripttype("modified_transcript");
+    }
+  };
+
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  };
+
+  useEffect(() => {
     axios
-      .post(`http://140.119.19.16:8000/continue_task/${taskID}/`)
+      .get("https://0e71-140-119-19-91.ngrok-free.app/voices/", {
+        headers: {
+          "ngrok-skip-browser-warning": 123,
+        },
+      })
+      .then((response) => {
+        setVoices(response.data);
+        setpostvoice(
+          Array.from({ length: video.speaker_counts }, () => {
+            return response.data[video.target_language].usable_voices[0];
+          })
+        );
+        setVoiceLanguageSelect(video.target_language);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
+  const handleContinueTaskClick = (taskID) => (events) => {
+    // Determine the field based on whether we are working with the original or modified transcript
+    let new_value =
+      istranscripttype === "original_transcript" ? title : transcript;
+
+    // Convert the field array to the appropriate format
+    // let fieldFormatted = field.map((item) => item.join(",")).join("\n");
+
+    // Form the URL with the required query parameters
+    let url = `https://0e71-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`;
+    console.log("URL:", url);
+    console.log("Headers:", {
+      "ngrok-skip-browser-warning": 123,
+    });
+    axios
+      .post(
+        url,
+        JSON.stringify({
+          new_transcript: new_value,
+          voice_list: postvoice,
+          fix_which_field: istranscripttype,
+        }),
+        {
+          headers: {
+            "ngrok-skip-browser-warning": 123,
+            // "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         if (response.status === 200) {
           console.log(response);
@@ -231,9 +348,7 @@ const EditTranscripts = () => {
             setAlertType("success");
             setOpen(true);
             setTimeout(() => {
-              // Start loading
               setLoading(true);
-              // Navigate to the specified page with a 2-second delay for the loader
               setTimeout(() => {
                 navigate("/service/processing");
               }, 2000);
@@ -288,15 +403,31 @@ const EditTranscripts = () => {
       });
     });
   }, []);
+  const [voicelanguageselect, setVoiceLanguageSelect] = useState("");
+  const [voices, setVoices] = useState({});
+  const [postvoice, setpostvoice] = useState([]);
+  const handleVoiceLanguageChange = (speakerNumber) => (events) => {
+    setpostvoice((prevArray) =>
+      prevArray.map((val, i) => {
+        if (i === speakerNumber - 1) {
+          return events.target.value;
+        } else {
+          return val;
+        }
+      })
+    );
+  };
 
   return (
     <div className="flex">
       <Sidebar />
+
       {loading && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
           <HashLoader color="#36d7b7" size={150} />
         </div>
       )}
+
       <Snackbar
         open={open}
         autoHideDuration={1500}
@@ -315,52 +446,123 @@ const EditTranscripts = () => {
       </Snackbar>
 
       <div className="container mx-auto px-4 bg-slate-300">
-        <div className="flex items-center">
-          <video
+        <div className="mb-4">
+          {/* <video
             src={video.mp4 || video.mp3}
             controls
             className="max-h-[150px] aspect-video"
-          />
+          /> */}
           <div className="ml-6 font-light">
             <div className="text-md font-semibold">{video.title}</div>
             <p className="text-sm text-gray-600">By {video.target_language}</p>
             <p>{video.status}</p>
           </div>
         </div>
-        {/* <form onSubmit={handleSubmit}>
-      <label>
-        Title:
-        <input type="text" value={title} onChange={handleTitleChange} />
-      </label>
-      <label>
-        Transcript:
-        <textarea value={transcript} onChange={handleTranscriptChange} />
-      </label>
-      <button type="submit">
-        Submit
-      </button>
-    </form> */}
+
+        <div className="overflow-y-auto max-h-[200px] mb-4">
+          {Array.from({ length: video.speaker_counts }, (_, i) => {
+            const speakerNumber = i + 1;
+            let speakerLabel;
+
+            switch (speakerNumber) {
+              case 1:
+                speakerLabel = "Speaker 1 Voices";
+                break;
+              case 2:
+                speakerLabel = "Speaker 2 Voices";
+                break;
+              case 3:
+                speakerLabel = "Speaker 3 Voices";
+                break;
+              default:
+                speakerLabel = `Speaker ${speakerNumber} Voices`;
+                break;
+            }
+
+            return (
+              <div key={`dropdown-container-${i}`}>
+                <div className="block">
+                  <label
+                    htmlFor={`voice-dropdown-${i}`}
+                    className="mb-2 text-base font-medium text-gray-900 dark:text-white"
+                  >
+                    {speakerLabel}
+                  </label>
+                  <select
+                    onChange={handleVoiceLanguageChange(speakerNumber)}
+                    id={`voice-dropdown-${i}`}
+                    className="w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    {voices[voicelanguageselect] &&
+                      voices[voicelanguageselect].usable_voices.map((value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         <button
-          className="button-hold "
+          className="button-hold"
           onClick={handleContinueTaskClick(video.taskID)}
         >
           <div>
-            <svg class="icon" viewBox="0 0 16 16">
+            <svg className="icon" viewBox="0 0 16 16">
               <polygon points="1.3,6.7 2.7,8.1 7,3.8 7,16 9,16 9,3.8 13.3,8.1 14.7,6.7 8,0"></polygon>
             </svg>
-            <svg class="progress" viewBox="0 0 32 32">
+            <svg className="progress" viewBox="0 0 32 32">
               <circle r="8" cx="16" cy="16" />
             </svg>
-            <svg class="tick" viewBox="0 0 24 24">
+            <svg className="tick" viewBox="0 0 24 24">
               <polyline points="18,7 11,16 6,12" />
             </svg>
           </div>
           Publish
         </button>
-        <FloatingActionButtonZoom />
+
+        <FloatingActionButtonZoom
+          formattedTitleForDisplay={formattedTitleForDisplay}
+          formattedTransForDisplay={formattedTransForDisplay}
+          value={value}
+          handleTitleChange={handleTitleChange}
+          handleTranscriptChange={handleTranscriptChange}
+          handleEditClick={handleEditClick}
+          handleChange={handleChange}
+          handleChangeIndex={handleChangeIndex}
+          theme={theme}
+          isEditing={isEditing}
+        />
       </div>
     </div>
   );
 };
 
 export default EditTranscripts;
+
+// const AComponent = ({ count }) => {
+//   return (
+//     <div>{count}</div>
+//   )
+// }
+// const BComponent = ({ setCount }) => {
+//   return (
+//     <button onClick={setCount} />
+//   )
+// }
+
+// const Test = () => {
+//   const [count, setCount] = useState(0)
+//   const handleClick = () => {
+//     setCount((prev) => prev + 1)
+//   }
+//   return (
+//     <div>
+//       <AComponent count={count} />
+//       <BComponent setCount={handleClick} />
+//     </div>
+//   )
+// }

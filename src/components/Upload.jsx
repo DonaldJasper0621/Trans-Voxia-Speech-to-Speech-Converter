@@ -2,7 +2,12 @@ import React from "react";
 import { AiOutlineFolderOpen } from "react-icons/ai";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
-import { MdOutlineMap,MdOutlineMovieFilter, MdOutlineHeadphones, MdOutlineDescription } from "react-icons/md";
+import {
+  MdOutlineMap,
+  MdOutlineMovieFilter,
+  MdOutlineHeadphones,
+  MdOutlineDescription,
+} from "react-icons/md";
 import { FaRegFileAudio } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Processing from "../MainService/Pages/Processing";
@@ -14,60 +19,41 @@ import { Fade } from "@mui/material";
 import { Analytics } from "@mui/icons-material";
 import axios from "axios";
 import { bgcolor } from "@mui/system";
-import './bgStyles.css'
+import "./bgStyles.css";
 
 const VideoDashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [audioTasks, setAudioTasks] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const PAGE_ITEM = 100;
+  const PAGE_ITEM = 50;
 
   const fetchVideoTasks = () => {
     axios
-      .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
+      .get(
+        `https://0e71-140-119-19-91.ngrok-free.app/tasks/?n=${PAGE_ITEM}&page=${page}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": 123,
+          },
+        }
+      )
       .then((response) => {
-        const completedVideoTasks = response.data.results.filter(task => 
-          task.status === "任務完成" && task.mode === 'video'
-        );
-        setTasks((prevTasks) => [...prevTasks, ...completedVideoTasks]);
-        if (completedVideoTasks.length < PAGE_ITEM) {
+        setTasks((prevTasks) => [...prevTasks, ...tasks]);
+        if (response.data.next === null) {
           setHasMore(false);
         } else {
+          console.log(1);
           setPage((prevPage) => prevPage + 1);
         }
       })
-      .catch((error) => {
-        alert(error);
-      });
-  };
-
-  const fetchAudioTasks = () => {
-    axios
-      .get(`http://140.119.19.16:8000/tasks/?n=${PAGE_ITEM}&page=${page}`)
-      .then((response) => {
-        const completedAudioTasks = response.data.results.filter(task => 
-          task.status === "任務完成" && task.mode === 'audio'
-        );
-        setAudioTasks((prevTasks) => [...prevTasks, ...completedAudioTasks]);
-        if (completedAudioTasks.length < PAGE_ITEM) {
-          setHasMore(false);
-        } else {
-          setPage((prevPage) => prevPage + 1);
-        }
-      })
-      .catch((error) => {
-        alert(error);
-      });
+      .catch((error) => {});
   };
 
   useEffect(() => {
+    console.log("page: ", page, "hasMore: ", hasMore);
     fetchVideoTasks();
-  }, [page]);
-
-  useEffect(() => {
-    fetchAudioTasks();
-  }, [page]);
+  }, [page, hasMore]);
 
   const mockVideos = [
     "video1.mp4",
@@ -93,24 +79,18 @@ const VideoDashboard = () => {
     {
       id: 3,
       icon: <MdOutlineMap className="mr-2 fill-slate-600" size={24} />,
-      label: (
-        <span className="font-semibold text-lg text-slate-500">
-          All
-        </span>
-      ),
+      label: <span className="font-semibold text-lg text-slate-500">All</span>,
       content: <TableRow />,
     },
     {
       id: 2,
       icon: <MdOutlineHeadphones className="mr-2 fill-slate-600" size={24} />,
       label: (
-        <span className=" font-semibold text-lg text-slate-500 ">
-          MP3
-        </span>
+        <span className=" font-semibold text-lg text-slate-500 ">MP3</span>
       ),
       content: (
         <div className="flex flex-wrap justify-center my-8 mt-9">
-          {audioTasks.map((task, index) => (
+          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "audio")).map((task, index) => (
             <div
               className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
               key={index}
@@ -133,13 +113,11 @@ const VideoDashboard = () => {
       id: 1,
       icon: <MdOutlineMovieFilter className="mr-2 fill-slate-600" size={24} />,
       label: (
-        <span className=" font-semibold text-lg text-slate-500 ">
-          MP4
-        </span>
+        <span className=" font-semibold text-lg text-slate-500 ">MP4</span>
       ),
       content: (
         <div className="flex flex-wrap justify-center my-8 mt-9">
-          {tasks.map((task, index) => (
+          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "video")).map((task, index) => (
             <div
               className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
               key={index}
@@ -184,12 +162,16 @@ const VideoDashboard = () => {
             href="../About"
             className="ant-btn upgrade-button ant-btn-sm"
           >
-            <span><button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current "> Upgrade</button></span>
+            <span>
+              <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
+                {" "}
+                Upgrade
+              </button>
+            </span>
           </a>
         </div>
 
-        <div className=" flex items-center w- py-3  ml-9">
-        </div>
+        <div className=" flex items-center w- py-3  ml-9"></div>
 
         <Tabs tabs={tabs} />
       </div>

@@ -10,7 +10,7 @@ import qs from "qs";
 import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
 import Tooltip from "@mui/material/Tooltip";
-import './bgStyles.css'
+import "./bgStyles.css";
 
 function ModeSelection() {
   const [videoFile, setVideoFile] = useState(null);
@@ -22,9 +22,22 @@ function ModeSelection() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const [posttargetlanguage, setposttargetlanguage] = useState("");
+
+  const [postBGM, setpostBGM] = useState("true");
+  const [postoutputmode, setpostoutputmode] = useState("transcript");
+  const [posttitle, setposttitle] = useState("");
+  const [postneedmodify, setpostneedmodify] = useState("false");
+  const [postfileupload, setpostfileupload] = useState("");
+  const [voiceLanguageSelect, setVoiceLanguageSelect] = useState("");
+
   useEffect(() => {
     axios
-      .get("http://140.119.19.16:8000/language/")
+      .get("https://0e71-140-119-19-91.ngrok-free.app/language/", {
+        headers: {
+          "ngrok-skip-browser-warning": 123,
+        },
+      })
       .then((response) => {
         setLanguageList(response.data);
         setposttargetlanguage(response.data[0].original_language);
@@ -36,47 +49,25 @@ function ModeSelection() {
 
   const [languagelist, setLanguageList] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://140.119.19.16:8000/voices/")
-      .then((response) => {
-        setVoices(response.data);
-        setpostvoice(Object.values(response.data)[0].usable_voices[0]);
-        setVoiceLanguageSelect(Object.keys(response.data)[0]);
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  }, []);
-
-  const [voices, setVoices] = useState({});
-  const [voicelanguageselect, setVoiceLanguageSelect] = useState("");
-
   const handleLanguageChange = (events) => {
-    setpostvoice(voices[events.target.value].usable_voices[0]);
-    setVoiceLanguageSelect(events.target.value);
+    // setpostvoice(voices[events.target.value].usable_voices[0]);
+    // setVoiceLanguageSelect(events.target.value);
     setposttargetlanguage(events.target.value);
-    console.log(events);
+    console.log("posttargetlanguage: ", events.target.value);
   };
 
-  const handleVoiceLanguageChange = (events) => {
-    setpostvoice(events.target.value);
-  };
   // ---------------------------------------------------------------------
   const handleSubmitClick = (events) => {
     setLoading(true);
     axios
       .postForm(
-        `http://140.119.19.16:8000/tasks/?target_language=${posttargetlanguage}&voice_selection=${postvoice}&mode=${postoutputmode}&title=${posttitle}&needModify=${postneedmodify}`,
+        `https://0e71-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
         {
           file: document.querySelector("#video").files[0],
         },
         {
           headers: {
-            "content-type": "multipart/form-data",
-            Cookie: `transvoxia-auth=${sessionStorage.getItem("key")};`,
-            "X-CSRFToken":
-              "iDoESx51anPaFPx6CyNoHCcXxsCpvJI51dJWaMJsQ9VlxrilTaGZVQShBrrypVE9",
+            "ngrok-skip-browser-warning": 123,
           },
         }
       )
@@ -85,7 +76,7 @@ function ModeSelection() {
         setTimeout(() => {
           setLoading(false);
           navigate("/service/processing");
-        }, 3000);
+        }, 5000);
       })
       .catch((error) => {
         setLoading(false);
@@ -93,15 +84,8 @@ function ModeSelection() {
       });
   };
 
-  const [posttargetlanguage, setposttargetlanguage] = useState("");
-  const [postvoice, setpostvoice] = useState("");
-  const [postoutputmode, setpostoutputmode] = useState("transcript");
-  const [posttitle, setposttitle] = useState("");
-  const [postneedmodify, setpostneedmodify] = useState("false");
-  const [postfileupload, setpostfileupload] = useState("");
-
-  const handleNeedModifyChange = (events) => {
-    setpostneedmodify(events.target.value);
+  const handleBGM = (events) => {
+    setpostBGM(events.target.value);
   };
 
   const handleOutputModeChange = (events) => {
@@ -114,18 +98,18 @@ function ModeSelection() {
     if (videoFile) {
       const url = URL.createObjectURL(videoFile);
       setposttitle(videoFile.name.split(".")[0]);
-  
+
       // Create a video element to get the duration
-      const videoElement = document.createElement('video');
+      const videoElement = document.createElement("video");
       videoElement.src = url;
-  
-      videoElement.addEventListener('loadedmetadata', () => {
+
+      videoElement.addEventListener("loadedmetadata", () => {
         const durationInSeconds = videoElement.duration;
         const minutes = Math.floor(durationInSeconds / 60);
         const seconds = Math.floor(durationInSeconds % 60);
-  
+
         const length = `${minutes} minutes ${seconds} seconds`;
-  
+
         setVideoMetadata({
           name: videoFile.name,
           length: length,
@@ -221,11 +205,11 @@ function ModeSelection() {
             <p>
               <strong>Name:</strong>
               <Tooltip title="Rename Title">
-              <input
-                value={posttitle}
-                onChange={(e) => setposttitle(e.target.value)}
-                placeholder="Type video name here"
-              />
+                <input
+                  value={posttitle}
+                  onChange={(e) => setposttitle(e.target.value)}
+                  placeholder="Type video name here"
+                />
               </Tooltip>
             </p>
             <p>
@@ -281,27 +265,6 @@ function ModeSelection() {
               ))}
             </select>
           </div>
-          <div className="block">
-            <label
-              htmlFor="default"
-              className="mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Output Voices
-            </label>
-            <select
-              onChange={handleVoiceLanguageChange}
-              id="default"
-              className=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              {voices[voicelanguageselect] &&
-                voices[voicelanguageselect].usable_voices.map((value) => (
-                  <option key={value} value={value}>
-                    {" "}
-                    {value}{" "}
-                  </option>
-                ))}
-            </select>
-          </div>
         </div>
         <div className="flex gap-40 ml-32 mt-16">
           <div className="block ">
@@ -326,17 +289,15 @@ function ModeSelection() {
               htmlFor="default"
               className="mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Processing Mode
+              Soundtrack & Instrumental
             </label>
             <select
-              onChange={handleNeedModifyChange}
+              onChange={handleBGM}
               id="default"
               className=" w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option defaultValue={"false"}>
-                Direct output without editing the transcript
-              </option>
-              <option value={true}>Output with editing the transcript</option>
+              <option defaultValue={"true"}>Keep Background Music</option>
+              <option value="false">Exclude Background Music</option>
             </select>
           </div>
         </div>

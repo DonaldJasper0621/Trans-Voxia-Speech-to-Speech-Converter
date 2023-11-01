@@ -44,7 +44,7 @@ const Processing = () => {
 
   const handleStopTaskClick = (taskID) => (events) => {
     axios
-      .post(`http://140.119.19.16:8000/stop_task/${taskID}/`)
+      .post(`https://0e71-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           setTimeout(() => {
@@ -72,6 +72,7 @@ const Processing = () => {
       })
       .catch((error) => {
         console.log(error.response);
+        console.log
         setTimeout(() => {
           setAlertConfig({ severity: "warning", message: "任務未成功" });
           setShowAlert(true);
@@ -82,52 +83,57 @@ const Processing = () => {
       });
   };
 
-  const handleContinueTaskClick = (taskID) => (events) => {
-    axios
-      .post(`http://140.119.19.16:8000/continue_task/${taskID}/`)
-      .then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          setTimeout(() => {
-            setAlertConfig({
-              severity: "success",
-              message: "This is a success alert — check it out!",
-            });
-            setShowAlert(true);
-            setTimeout(() => {
-              setShowAlert(false);
-            }, 1800);
-          }, 1000);
-        } else {
-          setTimeout(() => {
-            setAlertConfig({
-              severity: "warning",
-              message: "This is a warning alert — check it out!",
-            });
-            setShowAlert(true);
-            setTimeout(() => {
-              setShowAlert(false);
-            }, 1800);
-          }, 1000);
-        }
-      })
-      .catch((error) => {
-        console.log(error.response);
-        setTimeout(() => {
-          setAlertConfig({ severity: "warning", message: "任務未成功" });
-          setShowAlert(true);
-          setTimeout(() => {
-            setShowAlert(false);
-          }, 1800);
-        }, 1000);
-      });
-  };
+  // const handleContinueTaskClick = (taskID) => (events) => {
+  //   axios
+  //     .post(`https://0e71-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
+  //     .then((response) => {
+  //       if (response.status === 200) {
+  //         console.log(response);
+  //         setTimeout(() => {
+  //           setAlertConfig({
+  //             severity: "success",
+  //             message: "This is a success alert — check it out!",
+  //           });
+  //           setShowAlert(true);
+  //           setTimeout(() => {
+  //             setShowAlert(false);
+  //           }, 1800);
+  //         }, 1000);
+  //       } else {
+  //         setTimeout(() => {
+  //           setAlertConfig({
+  //             severity: "warning",
+  //             message: "This is a warning alert — check it out!",
+  //           });
+  //           setShowAlert(true);
+  //           setTimeout(() => {
+  //             setShowAlert(false);
+  //           }, 1800);
+  //         }, 1000);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //       setTimeout(() => {
+  //         setAlertConfig({ severity: "warning", message: "任務未成功" });
+  //         setShowAlert(true);
+  //         setTimeout(() => {
+  //           setShowAlert(false);
+  //         }, 1800);
+  //       }, 1000);
+  //     });
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://140.119.19.16:8000/tasks/?n=10&page=1"
+          "https://0e71-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
+          {
+            headers: {
+              "ngrok-skip-browser-warning": 123,
+            },
+          }
         );
         setApiData(response.data.results);
       } catch (error) {
@@ -144,7 +150,7 @@ const Processing = () => {
       // Clean up the interval when the component is unmounted
       clearInterval(timerId);
     };
-}, []);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -201,8 +207,8 @@ const Processing = () => {
           <Fade in={open} timeout={500}>
             <div className="w-full overflow-scroll h-screen">
               <div className="container mx-auto px-4 py-6">
-                <div className="mb-8"> 
-                  <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold"> 
+                <div className="mb-8">
+                  <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold">
                     Direct Output Without Editing Transcripts
                   </h1>
                   <hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
@@ -225,21 +231,27 @@ const Processing = () => {
                             {video.title}
                           </div>
                           <p className="text-sm text-left text-gray-600 font-serif italic">
-                            By {video.target_language} 
-                          </p> 
+                            By {video.target_language}
+                          </p>
                         </div>
                         <div className="object-right-top flex justify-between py-4">
-                        <p className="flex h-3 items-center text-md text-zinc-700">{video.status}
-                          <LongMenu
-                            options={[
-                            {
-                              name:"Stop the task",
-                              onClick: handleStopTaskClick(video.taskID),
-                            }, 
-                            ]}
-                            className="flex"
-                        />
-                        </p>
+                          <p className="flex h-3 items-center text-md text-zinc-700">
+                            {video.status}
+                            <LongMenu
+                              options={[
+                                {
+                                  name: "Edit Transcript",
+                                  onClick: () =>
+                                    handleNaviagteEditTranscriptClick(video),
+                                },
+                                {
+                                  name: "Stop the task",
+                                  onClick: handleStopTaskClick(video.taskID),
+                                }
+                              ]}
+                              className="flex"
+                            />
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -249,7 +261,8 @@ const Processing = () => {
                 <div>
                   <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold">
                     Output Videos That Transcripts Needed To Be Edited
-                  </h1><hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
+                  </h1>
+                  <hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
                   <div className="grid grid-cols-1 gap-4 mt-4">
                     {editVideos.map((video) => (
                       <div
@@ -270,29 +283,31 @@ const Processing = () => {
                           <p className="text-sm text-left text-gray-600 font-serif italic">
                             By {video.target_language}
                           </p>
-                          
                         </div>
                         <div className="object-right-top flex justify-between py-4">
-                        <p className="flex h-3 items-center text-md text-zinc-700">{video.status}
-                        <LongMenu
-                          options={[
-                            {
-                              name: "Edit Transcript",
-                              onClick: () =>
-                                handleNaviagteEditTranscriptClick(video),
-                            },
-                            {
-                              name: "Stop the task",
-                              onClick: handleStopTaskClick(video.taskID),
-                            },
-                            {
-                              name: "Direct Output",
-                              onClick: handleContinueTaskClick(video.taskID),
-                            },
-                          ]}
-                          className="flex"
-                        />
-                        </p>
+                          <p className="flex h-3 items-center text-md text-zinc-700">
+                            {video.status}
+                            <LongMenu
+                              options={[
+                                {
+                                  name: "Edit Transcript",
+                                  onClick: () =>
+                                    handleNaviagteEditTranscriptClick(video),
+                                },
+                                {
+                                  name: "Stop the task",
+                                  onClick: handleStopTaskClick(video.taskID),
+                                },
+                                {
+                                  name: "Direct Output",
+                                  onClick: handleContinueTaskClick(
+                                    video.taskID
+                                  ),
+                                },
+                              ]}
+                              className="flex"
+                            />
+                          </p>
                         </div>
                       </div>
                     ))}
