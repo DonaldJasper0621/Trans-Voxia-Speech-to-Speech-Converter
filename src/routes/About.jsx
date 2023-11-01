@@ -22,7 +22,7 @@ function About() {
       Affordable Plans for All
       </h1>
       <p className="mb-5">
-      Makabaka's pricing is simple, upfront and hassle-free. Upgrade, downgrade or cancel anytime.
+      Trans Voxia's pricing is simple, upfront and hassle-free. Upgrade, downgrade or cancel anytime.
       </p>
       <Pricing/>
       <Footer/>
