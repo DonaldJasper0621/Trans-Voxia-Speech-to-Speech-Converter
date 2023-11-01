@@ -76,6 +76,7 @@ function FloatingActionButtonZoom({
   handleChange,
   theme,
   isEditing,
+  formatBoxedLayout,
   handleChangeIndex,
 }) {
   const transitionDuration = {
@@ -128,33 +129,42 @@ function FloatingActionButtonZoom({
           <Tab label="Translated Transcript" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} dir={theme.direction}>
-        {isEditing[0] ? (
-          <textarea
+<TabPanel value={value} index={0} dir={theme.direction}>
+    {isEditing[0] ? (
+        <textarea
             style={{ width: "100%", minHeight: "300px" }}
             value={formattedTitleForDisplay}
             onChange={handleTitleChange}
-          />
-        ) : (
-          formattedTitleForDisplay
-            .split("\n")
-            .map((line, index) => <p key={index}>{line}</p>)
-        )}
-      </TabPanel>
+        />
+    ) : (
+        formattedTitleForDisplay
+            .split("\n\n")
+            .map((box, index) => (
+                <pre key={index} style={{ whiteSpace: 'pre-wrap', border: '1px solid', padding: '10px', marginBottom: '10px' }}>
+                    {box}
+                </pre>
+            ))
+    )}
+</TabPanel>
 
-      <TabPanel value={value} index={1} dir={theme.direction}>
-        {isEditing[1] ? (
-          <textarea
+<TabPanel value={value} index={1} dir={theme.direction}>
+    {isEditing[1] ? (
+        <textarea
             style={{ width: "100%", minHeight: "300px" }}
             value={formattedTransForDisplay}
             onChange={handleTranscriptChange}
-          />
-        ) : (
-          formattedTransForDisplay
-            .split("\n")
-            .map((line, index) => <p key={index}>{line}</p>)
-        )}
-      </TabPanel>
+        />
+    ) : (
+        formattedTransForDisplay
+            .split("\n\n")
+            .map((box, index) => (
+                <pre key={index} style={{ whiteSpace: 'pre-wrap', border: '1px solid', padding: '10px', marginBottom: '10px' }}>
+                    {box}
+                </pre>
+            ))
+    )}
+</TabPanel>
+
       {fabs.map((fab, index) => (
         <Zoom
           key={fab.color}
@@ -210,24 +220,39 @@ const EditTranscripts = () => {
   const [title, setTitle] = useState(extractedTranscript);
   const [transcript, setTranscript] = useState(extractedTransTranscript);
 
-  const formatTitleForDisplay = (titleArray) => {
-    return titleArray
-      .map((item) => {
-        // Take only the first four items of each entry
-        const [first, second, third, fourth] = item;
-        return [first, second, third, fourth].join(",");
-      })
-      .join("\n");
-  };
+  const formatBoxedLayout = (items) => {
+    if (!items || items.length < 5) {
+        return "Incomplete Data"; // Placeholder message for incorrect data format
+    }
+    let boundary = "---------------------";
+    let boxContent = [
+        `[${items[0] || "---"}]`,
+        `Start: ${items[1] || "---"} | End: ${items[2] || "---"}`,
+        items[3] || "---",
+        items[4] || "---" // This will include the translated transcript
+    ];
+    return [boundary, ...boxContent, boundary].join("\n");
+};
 
-  const formatTransForDisplay = (transArray) => {
+
+const formatTitleForDisplay = (titleArray) => {
+    return titleArray
+        .map((item) => {
+            const [first="---", second="---", third="---", fourth="---"] = item;
+            return formatBoxedLayout([first, second, third, fourth, "---"]);
+        })
+        .join("\n\n");
+};
+
+const formatTransForDisplay = (transArray) => {
     return transArray
-      .map((item) => {
-        const [first, second, third, , fifth] = item;
-        return [first, second, third, , fifth].join(",");
-      })
-      .join("\n");
-  };
+        .map((item) => {
+            const [first="---", second="---", third="---", fourth="---", fifth="---"] = item;
+            return formatBoxedLayout([first, second, third, fourth, fifth]);
+        })
+        .join("\n\n");
+};
+
 
   const formattedTitleForDisplay = formatTitleForDisplay(title);
   const formattedTransForDisplay = formatTransForDisplay(transcript);
@@ -235,25 +260,56 @@ const EditTranscripts = () => {
   // set this to video.transcript if it exists
   const [isEditing, setIsEditing] = useState([false, false]);
 
-  const handleTitleChange = (event) => {
-    // Split the input by newline to get each line
-    const lines = event.target.value.split("\n");
+  const parseBoxedContent = (boxedString) => {
+    // Split by newline
+    const lines = boxedString.trim().split("\n");
+    if (lines.length < 5) return ["---", "---", "---", "---", "---"];
+    const speaker = lines[1].replace(/\[|\]/g, '').trim();
+    const times = lines[2].split('|');
+    const start = times[0]?.split(':')[1]?.trim() || "---";
+    const end = times[1]?.split(':')[1]?.trim() || "---";
+    const content = lines[3] || "---";
+    const translatedContent = lines[4] || "---";  // Extracting translated content
+    return [speaker, start, end, content, translatedContent];
+};
 
-    // Convert each line back into an array
-    const updatedTitle = lines.map((line) => line.split(","));
 
+const handleTitleChange = (event) => {
+    // Split the textarea content by double newline (i.e., by box)
+    const boxes = event.target.value.split("\n\n");
+    // Convert each box back into an array
+    const updatedTitle = boxes.map(box => parseBoxedContent(box));
     setTitle(updatedTitle);
-  };
+};
 
-  const handleTranscriptChange = (event) => {
-    // Split the input by newline to get each line
-    const lines = event.target.value.split("\n");
-
-    // Convert each line back into an array
-    const updatedTrans = lines.map((line) => line.split(","));
-
+const handleTranscriptChange = (event) => {
+    // Split the textarea content by double newline (i.e., by box)
+    const boxes = event.target.value.split("\n\n");
+    // Convert each box back into an array
+    const updatedTrans = boxes.map(box => parseBoxedContent(box));
     setTranscript(updatedTrans);
-  };
+};
+
+
+  // const handleTitleChange = (event) => {
+  //   // Split the input by newline to get each line
+  //   const lines = event.target.value.split("\n");
+
+  //   // Convert each line back into an array
+  //   const updatedTitle = lines.map((line) => line.split(","));
+
+  //   setTitle(updatedTitle);
+  // };
+
+  // const handleTranscriptChange = (event) => {
+  //   // Split the input by newline to get each line
+  //   const lines = event.target.value.split("\n");
+
+  //   // Convert each line back into an array
+  //   const updatedTrans = lines.map((line) => line.split(","));
+
+  //   setTranscript(updatedTrans);
+  // };
   // const handleSubmit = async (field) => {
   //   const new_value = field === "original_transcript" ? title : transcript;
 
@@ -535,6 +591,7 @@ const EditTranscripts = () => {
           handleChangeIndex={handleChangeIndex}
           theme={theme}
           isEditing={isEditing}
+          formatBoxedLayout ={formatBoxedLayout}
         />
       </div>
     </div>
@@ -543,26 +600,4 @@ const EditTranscripts = () => {
 
 export default EditTranscripts;
 
-// const AComponent = ({ count }) => {
-//   return (
-//     <div>{count}</div>
-//   )
-// }
-// const BComponent = ({ setCount }) => {
-//   return (
-//     <button onClick={setCount} />
-//   )
-// }
 
-// const Test = () => {
-//   const [count, setCount] = useState(0)
-//   const handleClick = () => {
-//     setCount((prev) => prev + 1)
-//   }
-//   return (
-//     <div>
-//       <AComponent count={count} />
-//       <BComponent setCount={handleClick} />
-//     </div>
-//   )
-// }
