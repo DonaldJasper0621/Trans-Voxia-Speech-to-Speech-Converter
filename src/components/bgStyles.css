@@ -16,7 +16,7 @@
 .background-animate1{
   background: radial-gradient(circle, rgba(255,128,237,1) 0%, rgba(0,255,255,1) 20%,  rgba(0,255,0,1) 50%, rgba(0,255,255,1) 75%, rgba(255,128,237,1) 100%);
   background-size: 600%;
-  animation:AnimationName1 6s ease infinite;
+  animation:AnimationName1 10s linear infinite;
 }
 
 @keyframes AnimationName1 {
@@ -32,8 +32,7 @@
   font-size:0;
 }
 .btn:hover span {
-  
-  font-size:0.8em;
+  font-size:0.8rem;
 }
 .btn:hover .span {
   visibility:visible;

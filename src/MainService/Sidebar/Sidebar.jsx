@@ -123,33 +123,33 @@ const Sidebar = () => {
                 className="w-6 h-6"
               />
             </NavLink>
-            <span className="text-xl whitespace-pre">Trans Voxia</span>
+            <span className="text-xl whitespace-pre font-bold">Trans Voxia</span>
           </div>
 
           <div className="flex flex-col  h-full">
-            <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
+            <ul className="whitespace-pre px-2.5 py-5 flex flex-col gap-1 font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100  md:h-[68%] h-[70%]">
               <li>
                 <NavLink to={'/service/medialibrary'} className="link">
-                  <AiOutlineAppstore size={23} className="min-w-max" />
+                  <AiOutlineAppstore size={23}/>
                   Media Library
                 </NavLink>
               </li>
               <li>
                 <NavLink to={'/service/processing'} className="link">
-                  <BsPerson size={23} className="min-w-max" />
+                  <BsPerson size={23}/>
                   Processing
                 </NavLink>
               </li>
               <li>
                 <NavLink to={'/service/gallery'} className="link">
-                  <HiOutlineDatabase size={23} className="min-w-max" />
+                  <HiOutlineDatabase size={23}/>
                   Gallery
                 </NavLink>
               </li>
 
               {(open || isTabletMid) && (
-                <div className="border-y py-5 border-slate-300 ">
-                  <small className="pl-3 text-slate-500 inline-block mb-2">
+                <div className="border-y py-2 border-slate-300 ">
+                  <small className=" text-slate-500 inline-block mb-1 ">
                     Product categories
                   </small>
                   {subMenusList?.map((menu) => (
@@ -161,7 +161,7 @@ const Sidebar = () => {
               )}
               <li>
                 <NavLink to={'/settings'} className="link">
-                  <SlSettings size={23} className="min-w-max" />
+                  <SlSettings size={23}/>
                   Settings
                 </NavLink>
               </li>
