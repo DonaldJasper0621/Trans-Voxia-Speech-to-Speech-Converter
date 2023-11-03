@@ -258,7 +258,7 @@ const Processing = () => {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <h1 className="w-[800px] h-[30px] text-left text-black text-xl font-bold">
                     Output Videos That Transcripts Needed To Be Edited
                   </h1>
@@ -312,7 +312,7 @@ const Processing = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </Fade>
