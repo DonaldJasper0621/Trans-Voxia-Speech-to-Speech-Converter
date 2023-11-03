@@ -59,6 +59,13 @@ function ModeSelection() {
   // ---------------------------------------------------------------------
   const handleSubmitClick = (events) => {
     setLoading(true);
+
+    // Start the timeout immediately to navigate after 2.5 seconds
+    const navigateTimeout = setTimeout(() => {
+      setLoading(false);
+      navigate("/service/processing");
+    }, 3000);
+
     axios
       .postForm(
         `https://0e71-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
@@ -72,13 +79,15 @@ function ModeSelection() {
         }
       )
       .then(() => {
-        // after 2 seconds, stop the loading spinner and redirect to /service/processing
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/service/processing");
-        }, 3000);
+        // If the API call completes before the timeout, we clear the timeout
+        clearTimeout(navigateTimeout);
+        // Here, you might still want to navigate immediately or do something else
+        setLoading(false);
+        navigate("/service/processing");
       })
       .catch((error) => {
+        // If there is an error, we clear the timeout as well
+        clearTimeout(navigateTimeout);
         setLoading(false);
         alert(error);
       });
@@ -175,21 +184,21 @@ function ModeSelection() {
           premium voices &amp; downloads.
         </span>
         <a
-            target="_blank"
-            href="../About"
-            className="ant-btn upgrade-button ant-btn-sm"
-          >
-            <span>
-              <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
-                {" "}
-                Upgrade
-              </button>
-            </span>
-          </a>
+          target="_blank"
+          href="../About"
+          className="ant-btn upgrade-button ant-btn-sm"
+        >
+          <span>
+            <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
+              {" "}
+              Upgrade
+            </button>
+          </span>
+        </a>
       </div>
       <div className="flex items-center justify-center py-1.5">
         <span className=" text-2xl font-bold font-serif text-slate-500">
-          -    Settings    -
+          - Settings -
         </span>
       </div>
       <div className="text-left text-lg font-semibold pl-11">
@@ -218,10 +227,12 @@ function ModeSelection() {
               </Tooltip>
             </p>
             <p>
-              <strong className="font-bold">Length：</strong> {videoMetadata.length}
+              <strong className="font-bold">Length：</strong>{" "}
+              {videoMetadata.length}
             </p>
             <p>
-              <strong className="font-bold">Location：</strong> {videoMetadata.location}
+              <strong className="font-bold">Location：</strong>{" "}
+              {videoMetadata.location}
             </p>
           </div>
         </div>

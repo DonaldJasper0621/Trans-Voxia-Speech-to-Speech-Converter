@@ -144,7 +144,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 10 seconds (10000 milliseconds)
-    const timerId = setInterval(fetchData, 25000);
+    const timerId = setInterval(fetchData, 20000);
 
     return () => {
       // Clean up the interval when the component is unmounted
