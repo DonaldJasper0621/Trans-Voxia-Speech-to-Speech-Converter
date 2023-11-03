@@ -168,27 +168,32 @@ function ModeSelection() {
           <HashLoader color="#36d7b7" size={150} />
         </div>
       )}
-      <div className=" top-0 left-0 right-0 z-50 w-full py-4 text-sm leading-5 text-center overflow-hidden whitespace-nowrap text-white bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 background-animate">
+      <div className="flex-auto top-0 left-0 right-0 z-50 w-full h-12 py-3 text-center text-sm leading-5 whitespace-nowrap text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 background-animate">
         <span>
           You have <strong>15</strong> minutes &amp; <strong>10</strong> free
           downloads remaining. Upgrade for more minutes, unlimited access to
           premium voices &amp; downloads.
         </span>
         <a
-          target="_blank"
-          href="../About"
-          className="ant-btn upgrade-button ant-btn-sm ant-btn-background-ghost"
-        >
-          <span>Upgrade</span>
-        </a>
+            target="_blank"
+            href="../About"
+            className="ant-btn upgrade-button ant-btn-sm"
+          >
+            <span>
+              <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
+                {" "}
+                Upgrade
+              </button>
+            </span>
+          </a>
       </div>
-      <div className=" flex items-center justify-center py-3 bg-slate-100">
-        <span className=" text-2xl font-bold text-slate-500">
-          Video Settings
+      <div className="flex items-center justify-center py-1.5">
+        <span className=" text-2xl font-bold font-serif text-slate-500">
+          -    Settings    -
         </span>
       </div>
-      <div className="text-left text-lg font-semibold  pl-11">
-        <h1 className="mb-5 mt-4"> Media</h1>
+      <div className="text-left text-lg font-semibold pl-11">
+        <h1 className="mb-5"> Media</h1>
 
         <div className="flex">
           <div
@@ -203,7 +208,7 @@ function ModeSelection() {
           </div>
           <div className="ml-6 font-light">
             <p>
-              <strong>Name:</strong>
+              <strong className="font-bold">Name：</strong>
               <Tooltip title="Rename Title">
                 <input
                   value={posttitle}
@@ -213,10 +218,10 @@ function ModeSelection() {
               </Tooltip>
             </p>
             <p>
-              <strong>Length:</strong> {videoMetadata.length}
+              <strong className="font-bold">Length：</strong> {videoMetadata.length}
             </p>
             <p>
-              <strong>Location:</strong> {videoMetadata.location}
+              <strong className="font-bold">Location：</strong> {videoMetadata.location}
             </p>
           </div>
         </div>
