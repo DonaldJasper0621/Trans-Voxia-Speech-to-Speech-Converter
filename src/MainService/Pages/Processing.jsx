@@ -72,7 +72,7 @@ const Processing = () => {
       })
       .catch((error) => {
         console.log(error.response);
-        console.log
+        console.log;
         setTimeout(() => {
           setAlertConfig({ severity: "warning", message: "任務未成功" });
           setShowAlert(true);
@@ -144,7 +144,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 10 seconds (10000 milliseconds)
-    const timerId = setInterval(fetchData, 10000);
+    const timerId = setInterval(fetchData, 25000);
 
     return () => {
       // Clean up the interval when the component is unmounted
@@ -247,7 +247,7 @@ const Processing = () => {
                                 {
                                   name: "Stop the task",
                                   onClick: handleStopTaskClick(video.taskID),
-                                }
+                                },
                               ]}
                               className="flex"
                             />

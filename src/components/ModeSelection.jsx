@@ -76,7 +76,7 @@ function ModeSelection() {
         setTimeout(() => {
           setLoading(false);
           navigate("/service/processing");
-        }, 5000);
+        }, 3000);
       })
       .catch((error) => {
         setLoading(false);

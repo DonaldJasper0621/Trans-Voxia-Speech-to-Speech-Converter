@@ -14,6 +14,42 @@ import React, { useRef, useEffect } from "react";
 import axios from "axios";
 
 function TableRow({ data }) {
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsButtonDisabled(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsButtonDisabled(false);
+  };
+
+  const downloadTranscript = () => {
+    // Convert the transcript data into a string format
+    const transcriptText = data.transcript.map((t) => t.join("\t")).join("\n");
+
+    // Create a Blob from the transcript string
+    const blob = new Blob([transcriptText], { type: "text/plain" });
+
+    // Create a link element
+    const link = document.createElement("a");
+
+    // Set the download attribute to the filename you wish to use
+    link.download = "transcript.txt";
+
+    // Create a URL for the blob and set it as the href of the link
+    link.href = window.URL.createObjectURL(blob);
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+  };
+
   const getFileIcon = (mode) => {
     if (mode === "video") {
       return <MdOutlineVideoLibrary className="mr-1" size={32} />;
@@ -99,32 +135,42 @@ function TableRow({ data }) {
         </NavLink> */}
           <NavLink
             to={"/service/transcript"}
-            target="_blank"
             className="btn bg-slate-200 shadow-md rounded-full py-2 px-2 flex items-center mr-4 hover:bg-emerald-100"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent the default navigation
+              downloadTranscript(); // Call the function to download transcript
+            }}
           >
             <MdOutlineDescription
-              className=" fill-emerald-500 justify-center hover:fill-emerald-600"
+              className="fill-emerald-500 justify-center hover:fill-emerald-600"
               size={21}
             />
-            <span className=" text-emerald-600"> Transcript</span>
+            <span className="text-emerald-600"> Transcript</span>
           </NavLink>
           {data.mode === "video" && (
             <>
               <NavLink
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDownloadLink(e, "audio");
-                }}
                 to={"/service/audio"}
                 target="_blank"
-                className="btn  bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center hover:bg-sky-100"
+                className={`btn bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center ${
+                  isButtonDisabled
+                    ? "cursor-not-allowed"
+                    : "hover:cursor-not-allowed"
+                }`}
+                onClick={(e) => {
+                  if (isButtonDisabled) {
+                    e.preventDefault();
+                  } else {
+                    // Handle your onClick event here
+                  }
+                }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
-                <MdOutlineHeadphones
-                  className=" fill-sky-600 justify-center hover:fill-sky-800"
-                  size={21}
-                />
-                <span className=" text-sky-600 "> Audio</span>
+                <MdOutlineHeadphones className="fill-sky-600" size={21} />
+                <span className="text-sky-600"> Audio</span>
               </NavLink>
+
               <NavLink
                 onClick={(e) => {
                   e.preventDefault();
@@ -223,12 +269,14 @@ function App() {
 
   const fetchMoreData = () => {
     axios
-      .get(`https://0e71-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
-      {
-        headers: {
-          "ngrok-skip-browser-warning": 123,
-        },
-      })
+      .get(
+        `https://0e71-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": 123,
+          },
+        }
+      )
       .then((response) => {
         const completedTasks = response.data.results.filter(
           (task) => task.status === "任務完成"
