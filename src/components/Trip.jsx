@@ -17,16 +17,16 @@ function Trip() {
           heading="Donald Jasper"
           text="Front End Engineer"
         />
-        <TripData image={Tony} heading="Tony Lin" text="Front End Engineer" />
+        <TripData image={Tony} heading="Tony Lin" text="Back End Engineer" />
         <TripData
           image={Vanessa}
           heading="Vanessa Huang"
-          text="Front End Engineer"
+          text="Database Engineer"
         />
         <TripData
           image={Jonaya}
           heading="Jenaya Lin"
-          text="Front End Engineer"
+          text="Database Engineer"
         />
         <TripData
           image={Apple}

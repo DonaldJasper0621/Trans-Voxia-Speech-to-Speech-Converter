@@ -82,60 +82,60 @@ const VideoDashboard = () => {
       label: <span className="font-semibold text-lg text-slate-500">All</span>,
       content: <TableRow />,
     },
-    {
-      id: 2,
-      icon: <MdOutlineHeadphones className="mr-2 fill-slate-600" size={24} />,
-      label: (
-        <span className=" font-semibold text-lg text-slate-500 ">MP3</span>
-      ),
-      content: (
-        <div className="flex flex-wrap justify-center my-8 mt-9">
-          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "audio")).map((task, index) => (
-            <div
-              className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
-              key={index}
-            >
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">{task.title}</div>{" "}
-                {/* assuming 'file_name' is the property for the audio name */}
-                <audio controls className="w-full h-48">
-                  <source src={task.mp3} type="audio/mpeg" />{" "}
-                  {/* assuming 'file_url' is the property for the audio URL */}
-                  Your browser does not support the audio tag.
-                </audio>
-              </div>
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      id: 1,
-      icon: <MdOutlineMovieFilter className="mr-2 fill-slate-600" size={24} />,
-      label: (
-        <span className=" font-semibold text-lg text-slate-500 ">MP4</span>
-      ),
-      content: (
-        <div className="flex flex-wrap justify-center my-8 mt-9">
-          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "video")).map((task, index) => (
-            <div
-              className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
-              key={index}
-            >
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">{task.title}</div>{" "}
-                {/* assuming 'file_name' is the property for the video name */}
-                <video controls className="w-full h-48">
-                  <source src={task.mp4} type="video/mp4" />{" "}
-                  {/* assuming 'file_url' is the property for the video URL */}
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            </div>
-          ))}
-        </div>
-      ),
-    },
+//    {
+//      id: 2,
+//      icon: <MdOutlineHeadphones className="mr-2 fill-slate-600" size={24} />,
+//      label: (
+//        <span className=" font-semibold text-lg text-slate-500 ">MP3</span>
+//      ),
+//      content: (
+//        <div className="flex flex-wrap justify-center my-8 mt-9">
+//          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "audio")).map((task, index) => (
+//            <div
+//              className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
+//              key={index}
+//            >
+//             <div className="px-6 py-4">
+//                <div className="font-bold text-xl mb-2">{task.title}</div>{" "}
+//                {/* assuming 'file_name' is the property for the audio name */}
+//                <audio controls className="w-full h-48">
+//                  <source src={task.mp3} type="audio/mpeg" />{" "}
+//                  {/* assuming 'file_url' is the property for the audio URL */}
+//                  Your browser does not support the audio tag.
+//                </audio>
+//              </div>
+//           </div>
+//          ))}
+//        </div>
+//      ),
+//    },
+//    {
+//      id: 1,
+//      icon: <MdOutlineMovieFilter className="mr-2 fill-slate-600" size={24} />,
+//      label: (
+//        <span className=" font-semibold text-lg text-slate-500 ">MP4</span>
+//      ),
+//      content: (
+//        <div className="flex flex-wrap justify-center my-8 mt-9">
+//          {tasks.filter(((task) => task.status === "任務完成" && task.mode === "video")).map((task, index) => (
+//            <div
+//              className="overflow-hidden shadow-lg my-2 mx-2 rounded-md w-96"
+//              key={index}
+//            >
+//              <div className="px-6 py-4">
+//                <div className="font-bold text-xl mb-2">{task.title}</div>{" "}
+//                {/* assuming 'file_name' is the property for the video name */}
+//                <video controls className="w-full h-48">
+//                  <source src={task.mp4} type="video/mp4" />{" "}
+//                  {/* assuming 'file_url' is the property for the video URL */}
+//                 Your browser does not support the video tag.
+//                </video>
+//              </div>
+//            </div>
+//          ))}
+//        </div>
+//      ),
+//    },
   ];
 
   //   const [file, setFile] = useState();
