@@ -1,22 +1,22 @@
+import React from 'react';
 import { DefaultPlayer as Video } from "react-html5video";
 import "react-html5video/dist/styles.css";
-import TestVideo from "../assets/TestVideo.mp4";
+import TestVideo from "../assets/Demoooo.mp4";
+import Demo_Photo from "../assets/demo_photo.png";
 import "./VideoPlayer.css";
 
 function VideoPlayer() {
   return (
-    <div className="video-player-container ">
+    <div className="video-player-container">
       <Video
-        className="video-player" // Add this line
+        autoPlay // this attempts to play the video as soon as it can
+        muted // this is often required for autoplay to work
         loop
-        muted
         controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
-        poster="https://i.ytimg.com/vi/kMvPtA8GL9I/maxresdefault.jpg"
-        onCanPlayThrough={() => {
-          // Do stuff
-        }}
+        poster={Demo_Photo}
+        className="video-player"
       >
-        <source src={TestVideo} type="video/webm" />
+        <source src={TestVideo} type="video/mp4" />
         <track
           label="English"
           kind="subtitles"
