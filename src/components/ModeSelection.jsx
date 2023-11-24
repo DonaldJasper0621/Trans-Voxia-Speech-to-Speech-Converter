@@ -9,6 +9,7 @@ import { data } from "autoprefixer";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
+import { Discuss } from "react-loader-spinner";
 import Tooltip from "@mui/material/Tooltip";
 import "./bgStyles.css";
 
@@ -33,7 +34,7 @@ function ModeSelection() {
 
   useEffect(() => {
     axios
-      .get("https://0e71-140-119-19-91.ngrok-free.app/language/", {
+      .get("https://b45e-140-119-19-91.ngrok-free.app/language/", {
         headers: {
           "ngrok-skip-browser-warning": 123,
         },
@@ -68,7 +69,7 @@ function ModeSelection() {
 
     axios
       .postForm(
-        `https://0e71-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
+        `https://b45e-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
         {
           file: document.querySelector("#video").files[0],
         },
@@ -155,11 +156,11 @@ function ModeSelection() {
       .then((result) => {
         if (result.isConfirmed) {
           handleSubmitClick();
-          swalWithBootstrapButtons.fire(
-            "Transcribing in process!",
-            "Your file is being processed.",
-            "success"
-          );
+          // swalWithBootstrapButtons.fire(
+          //   "Transcribing in process!",
+          //   "Your file is being processed.",
+          //   "success"
+          // );
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire(
             "Cancelled",
@@ -174,7 +175,16 @@ function ModeSelection() {
     <div className="w-full overflow-scroll h-screen">
       {loading && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
-          <HashLoader color="#36d7b7" size={150} />
+          <Discuss
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="comment-loading"
+            wrapperStyle={{}}
+            wrapperClass="comment-wrapper"
+            color="#fff"
+            backgroundColor="#F4442E"
+          />
         </div>
       )}
       <div className="flex-auto top-0 left-0 right-0 z-50 w-full h-12 py-3 text-center text-sm leading-5 whitespace-nowrap text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 background-animate">

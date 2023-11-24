@@ -9,6 +9,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LongMenu from "./LongMenu";
 import { useNavigate } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { Dna } from "react-loader-spinner";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -44,7 +45,7 @@ const Processing = () => {
 
   const handleStopTaskClick = (taskID) => (events) => {
     axios
-      .post(`https://0e71-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
+      .post(`https://b45e-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           setTimeout(() => {
@@ -85,7 +86,7 @@ const Processing = () => {
 
   // const handleContinueTaskClick = (taskID) => (events) => {
   //   axios
-  //     .post(`https://0e71-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
+  //     .post(`https://b45e-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
   //     .then((response) => {
   //       if (response.status === 200) {
   //         console.log(response);
@@ -123,12 +124,14 @@ const Processing = () => {
   //       }, 1000);
   //     });
   // };
+  const [tempId, setTempId] = useState(0);
+  const [incompleteData, setIncompleteData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://0e71-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
+          "https://b45e-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
           {
             headers: {
               "ngrok-skip-browser-warning": 123,
@@ -143,7 +146,7 @@ const Processing = () => {
 
     fetchData();
 
-    // Fetch new data every 10 seconds (10000 milliseconds)
+    // Fetch new data every 20 seconds (20000 milliseconds)
     const timerId = setInterval(fetchData, 20000);
 
     return () => {
@@ -182,7 +185,14 @@ const Processing = () => {
     <div className="flex">
       {loading ? (
         <div className="flex justify-center items-center h-screen w-screen">
-          <ScaleLoader color="#36d7b7" />
+          <Dna
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="dna-loading"
+            wrapperStyle={{}}
+            wrapperClass="dna-wrapper"
+          />
         </div>
       ) : (
         <>
@@ -214,6 +224,47 @@ const Processing = () => {
                   <hr className="bg-gradient-to-r from-indigo-700 via-rose-400 to-indigo-700 w-auto h-[4px] "></hr>
 
                   <div className="grid grid-cols-1 gap-4 mt-4">
+                    {incompleteData.map((video) => (
+                      <div
+                        key={video.taskID}
+                        className="shadow-lg rounded-md p-4 h-[150px] flex"
+                      >
+                        <div className="rounded-lg ring-2 ring-slate-300 focus:ring-opacity-50 hover:ring-slate-600">
+                          <video
+                            src={video.mp4 || video.mp3}
+                            controls
+                            className="rounded-lg max-h-[120px] max-w-[210px] aspect-video"
+                          />
+                        </div>
+                        <div className="ml-6 flex-auto">
+                          <div className="text-md text-left font-semibold py-2">
+                            {video.title}
+                          </div>
+                          <p className="text-sm text-left text-gray-600 font-serif italic">
+                            By {video.target_language}
+                          </p>
+                        </div>
+                        <div className="object-right-top flex justify-between py-4">
+                          <p className="flex h-3 items-center text-md text-zinc-700">
+                            {video.status}
+                            <LongMenu
+                              options={[
+                                {
+                                  name: "Edit Transcript",
+                                  onClick: () =>
+                                    handleNaviagteEditTranscriptClick(video),
+                                },
+                                {
+                                  name: "Stop the task",
+                                  onClick: handleStopTaskClick(video.taskID),
+                                },
+                              ]}
+                              className="flex"
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                     {directVideos.map((video) => (
                       <div
                         key={video.taskID}

@@ -21,6 +21,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
+import { Comment } from "react-loader-spinner";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -129,41 +130,53 @@ function FloatingActionButtonZoom({
           <Tab label="Translated Transcript" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-<TabPanel value={value} index={0} dir={theme.direction}>
-    {isEditing[0] ? (
-        <textarea
+      <TabPanel value={value} index={0} dir={theme.direction}>
+        {isEditing[0] ? (
+          <textarea
             style={{ width: "100%", minHeight: "300px" }}
             value={formattedTitleForDisplay}
             onChange={handleTitleChange}
-        />
-    ) : (
-        formattedTitleForDisplay
-            .split("\n\n")
-            .map((box, index) => (
-                <pre key={index} style={{ whiteSpace: 'pre-wrap', border: '1px solid', padding: '10px', marginBottom: '10px' }}>
-                    {box}
-                </pre>
-            ))
-    )}
-</TabPanel>
+          />
+        ) : (
+          formattedTitleForDisplay.split("\n\n").map((box, index) => (
+            <pre
+              key={index}
+              style={{
+                whiteSpace: "pre-wrap",
+                border: "1px solid",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              {box}
+            </pre>
+          ))
+        )}
+      </TabPanel>
 
-<TabPanel value={value} index={1} dir={theme.direction}>
-    {isEditing[1] ? (
-        <textarea
+      <TabPanel value={value} index={1} dir={theme.direction}>
+        {isEditing[1] ? (
+          <textarea
             style={{ width: "100%", minHeight: "300px" }}
             value={formattedTransForDisplay}
             onChange={handleTranscriptChange}
-        />
-    ) : (
-        formattedTransForDisplay
-            .split("\n\n")
-            .map((box, index) => (
-                <pre key={index} style={{ whiteSpace: 'pre-wrap', border: '1px solid', padding: '10px', marginBottom: '10px' }}>
-                    {box}
-                </pre>
-            ))
-    )}
-</TabPanel>
+          />
+        ) : (
+          formattedTransForDisplay.split("\n\n").map((box, index) => (
+            <pre
+              key={index}
+              style={{
+                whiteSpace: "pre-wrap",
+                border: "1px solid",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              {box}
+            </pre>
+          ))
+        )}
+      </TabPanel>
 
       {fabs.map((fab, index) => (
         <Zoom
@@ -222,37 +235,42 @@ const EditTranscripts = () => {
 
   const formatBoxedLayout = (items) => {
     if (!items || items.length < 5) {
-        return "Incomplete Data"; // Placeholder message for incorrect data format
+      return "Incomplete Data"; // Placeholder message for incorrect data format
     }
     let boundary = "---------------------";
     let boxContent = [
-        `[${items[0] || "---"}]`,
-        `Start: ${items[1] || "---"} | End: ${items[2] || "---"}`,
-        items[3] || "---",
-        items[4] || "---" // This will include the translated transcript
+      `[${items[0] || "---"}]`,
+      `Start: ${items[1] || "---"} | End: ${items[2] || "---"}`,
+      items[3] || "---",
+      items[4] || "---", // This will include the translated transcript
     ];
     return [boundary, ...boxContent, boundary].join("\n");
-};
+  };
 
-
-const formatTitleForDisplay = (titleArray) => {
+  const formatTitleForDisplay = (titleArray) => {
     return titleArray
-        .map((item) => {
-            const [first="---", second="---", third="---", fourth="---"] = item;
-            return formatBoxedLayout([first, second, third, fourth, "---"]);
-        })
-        .join("\n\n");
-};
+      .map((item) => {
+        const [first = "---", second = "---", third = "---", fourth = "---"] =
+          item;
+        return formatBoxedLayout([first, second, third, fourth, "---"]);
+      })
+      .join("\n\n");
+  };
 
-const formatTransForDisplay = (transArray) => {
+  const formatTransForDisplay = (transArray) => {
     return transArray
-        .map((item) => {
-            const [first="---", second="---", third="---", fourth="---", fifth="---"] = item;
-            return formatBoxedLayout([first, second, third, fourth, fifth]);
-        })
-        .join("\n\n");
-};
-
+      .map((item) => {
+        const [
+          first = "---",
+          second = "---",
+          third = "---",
+          fourth = "---",
+          fifth = "---",
+        ] = item;
+        return formatBoxedLayout([first, second, third, fourth, fifth]);
+      })
+      .join("\n\n");
+  };
 
   const formattedTitleForDisplay = formatTitleForDisplay(title);
   const formattedTransForDisplay = formatTransForDisplay(transcript);
@@ -264,32 +282,30 @@ const formatTransForDisplay = (transArray) => {
     // Split by newline
     const lines = boxedString.trim().split("\n");
     if (lines.length < 5) return ["---", "---", "---", "---", "---"];
-    const speaker = lines[1].replace(/\[|\]/g, '').trim();
-    const times = lines[2].split('|');
-    const start = times[0]?.split(':')[1]?.trim() || "---";
-    const end = times[1]?.split(':')[1]?.trim() || "---";
+    const speaker = lines[1].replace(/\[|\]/g, "").trim();
+    const times = lines[2].split("|");
+    const start = times[0]?.split(":")[1]?.trim() || "---";
+    const end = times[1]?.split(":")[1]?.trim() || "---";
     const content = lines[3] || "---";
-    const translatedContent = lines[4] || "---";  // Extracting translated content
+    const translatedContent = lines[4] || "---"; // Extracting translated content
     return [speaker, start, end, content, translatedContent];
-};
+  };
 
-
-const handleTitleChange = (event) => {
+  const handleTitleChange = (event) => {
     // Split the textarea content by double newline (i.e., by box)
     const boxes = event.target.value.split("\n\n");
     // Convert each box back into an array
-    const updatedTitle = boxes.map(box => parseBoxedContent(box));
+    const updatedTitle = boxes.map((box) => parseBoxedContent(box));
     setTitle(updatedTitle);
-};
+  };
 
-const handleTranscriptChange = (event) => {
+  const handleTranscriptChange = (event) => {
     // Split the textarea content by double newline (i.e., by box)
     const boxes = event.target.value.split("\n\n");
     // Convert each box back into an array
-    const updatedTrans = boxes.map(box => parseBoxedContent(box));
+    const updatedTrans = boxes.map((box) => parseBoxedContent(box));
     setTranscript(updatedTrans);
-};
-
+  };
 
   // const handleTitleChange = (event) => {
   //   // Split the input by newline to get each line
@@ -349,7 +365,7 @@ const handleTranscriptChange = (event) => {
 
   useEffect(() => {
     axios
-      .get("https://0e71-140-119-19-91.ngrok-free.app/voices/", {
+      .get("https://b45e-140-119-19-91.ngrok-free.app/voices/", {
         headers: {
           "ngrok-skip-browser-warning": 123,
         },
@@ -377,7 +393,7 @@ const handleTranscriptChange = (event) => {
     // let fieldFormatted = field.map((item) => item.join(",")).join("\n");
 
     // Form the URL with the required query parameters
-    let url = `https://0e71-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`;
+    let url = `https://b45e-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`;
     console.log("URL:", url);
     console.log("Headers:", {
       "ngrok-skip-browser-warning": 123,
@@ -480,7 +496,16 @@ const handleTranscriptChange = (event) => {
 
       {loading && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
-          <HashLoader color="#36d7b7" size={150} />
+          <Comment
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="comment-loading"
+            wrapperStyle={{}}
+            wrapperClass="comment-wrapper"
+            color="#fff"
+            backgroundColor="#F4442E"
+          />
         </div>
       )}
 
@@ -591,7 +616,7 @@ const handleTranscriptChange = (event) => {
           handleChangeIndex={handleChangeIndex}
           theme={theme}
           isEditing={isEditing}
-          formatBoxedLayout ={formatBoxedLayout}
+          formatBoxedLayout={formatBoxedLayout}
         />
       </div>
     </div>
@@ -599,5 +624,3 @@ const handleTranscriptChange = (event) => {
 };
 
 export default EditTranscripts;
-
-
