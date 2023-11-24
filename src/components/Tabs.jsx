@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import { Dna } from "react-loader-spinner";
 import './bgStyles.css'
 
 function Tabs({ tabs }) {
@@ -38,7 +36,14 @@ function Tabs({ tabs }) {
     <div className="overflow-x-hidden w-full">
       {loading && (
         <div className="loading fixed inset-0 flex items-center justify-center ml-20">
-          <ScaleLoader color="#36d7b7" size={40} />
+          <Dna
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="dna-loading"
+            wrapperStyle={{}}
+            wrapperClass="dna-wrapper"
+          />
         </div>
       )}
 

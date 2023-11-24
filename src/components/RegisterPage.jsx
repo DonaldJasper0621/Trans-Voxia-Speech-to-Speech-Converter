@@ -15,7 +15,7 @@ function RegisterPage() {
     events.preventDefault();
     if (passwordRef.current.value === confirmpasswordRef.current.value) {
       axios
-        .post("http://140.119.19.16:8000/accounts/", {
+        .post("https://b45e-140-119-19-91.ngrok-free.app/accounts/", {
           username: usernameRef.current.value,
           email: emailRef.current.value,
           password1: passwordRef.current.value,

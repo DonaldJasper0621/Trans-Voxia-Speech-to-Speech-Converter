@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import PuffLoader from "react-spinners/PuffLoader";
+import { Dna } from "react-loader-spinner";
 
 function LoginPage() {
   const emailRef = useRef(null);
@@ -17,7 +17,12 @@ function LoginPage() {
     events.preventDefault();
     axios
       .post(
-        "http://140.119.19.16:8000/login/",
+        "https://b45e-140-119-19-91.ngrok-free.app/login/",
+        {
+          headers: {
+            "ngrok-skip-browser-warning": 123,
+          },
+        },
         {
           username: emailRef.current.value,
           password: passwordRef.current.value,
@@ -48,8 +53,23 @@ function LoginPage() {
   // If loading is true, show the loader with full-screen white background
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'white' }}>
-        <PuffLoader color="#36d7b7" size={150} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: "white",
+        }}
+      >
+        <Dna
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
       </div>
     );
   }

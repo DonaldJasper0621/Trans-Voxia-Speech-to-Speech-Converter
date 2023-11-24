@@ -8,7 +8,6 @@ import axios from "axios";
 import { data } from "autoprefixer";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import HashLoader from "react-spinners/HashLoader";
 import { Discuss } from "react-loader-spinner";
 import Tooltip from "@mui/material/Tooltip";
 import "./bgStyles.css";
