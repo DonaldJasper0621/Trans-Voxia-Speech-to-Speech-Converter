@@ -8,7 +8,7 @@ import axios from "axios";
 import { data } from "autoprefixer";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import HashLoader from "react-spinners/HashLoader";
+import { Discuss } from "react-loader-spinner";
 import Tooltip from "@mui/material/Tooltip";
 import "./bgStyles.css";
 
@@ -33,7 +33,7 @@ function ModeSelection() {
 
   useEffect(() => {
     axios
-      .get("https://0e71-140-119-19-91.ngrok-free.app/language/", {
+      .get("https://b45e-140-119-19-91.ngrok-free.app/language/", {
         headers: {
           "ngrok-skip-browser-warning": 123,
         },
@@ -59,9 +59,16 @@ function ModeSelection() {
   // ---------------------------------------------------------------------
   const handleSubmitClick = (events) => {
     setLoading(true);
+
+    // Start the timeout immediately to navigate after 2.5 seconds
+    const navigateTimeout = setTimeout(() => {
+      setLoading(false);
+      navigate("/service/processing");
+    }, 3000);
+
     axios
       .postForm(
-        `https://0e71-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
+        `https://b45e-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
         {
           file: document.querySelector("#video").files[0],
         },
@@ -72,13 +79,15 @@ function ModeSelection() {
         }
       )
       .then(() => {
-        // after 2 seconds, stop the loading spinner and redirect to /service/processing
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/service/processing");
-        }, 5000);
+        // If the API call completes before the timeout, we clear the timeout
+        clearTimeout(navigateTimeout);
+        // Here, you might still want to navigate immediately or do something else
+        setLoading(false);
+        navigate("/service/processing");
       })
       .catch((error) => {
+        // If there is an error, we clear the timeout as well
+        clearTimeout(navigateTimeout);
         setLoading(false);
         alert(error);
       });
@@ -146,11 +155,11 @@ function ModeSelection() {
       .then((result) => {
         if (result.isConfirmed) {
           handleSubmitClick();
-          swalWithBootstrapButtons.fire(
-            "Transcribing in process!",
-            "Your file is being processed.",
-            "success"
-          );
+          // swalWithBootstrapButtons.fire(
+          //   "Transcribing in process!",
+          //   "Your file is being processed.",
+          //   "success"
+          // );
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire(
             "Cancelled",
@@ -165,7 +174,16 @@ function ModeSelection() {
     <div className="w-full overflow-scroll h-screen">
       {loading && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-white flex items-center justify-center z-50">
-          <HashLoader color="#36d7b7" size={150} />
+          <Discuss
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="comment-loading"
+            wrapperStyle={{}}
+            wrapperClass="comment-wrapper"
+            color="#fff"
+            backgroundColor="#F4442E"
+          />
         </div>
       )}
       <div className="flex-auto top-0 left-0 right-0 z-50 w-full h-12 py-3 text-center text-sm leading-5 whitespace-nowrap text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 background-animate">
@@ -175,21 +193,21 @@ function ModeSelection() {
           premium voices &amp; downloads.
         </span>
         <a
-            target="_blank"
-            href="../About"
-            className="ant-btn upgrade-button ant-btn-sm"
-          >
-            <span>
-              <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
-                {" "}
-                Upgrade
-              </button>
-            </span>
-          </a>
+          target="_blank"
+          href="../About"
+          className="ant-btn upgrade-button ant-btn-sm"
+        >
+          <span>
+            <button className="w-20 h-auto border-l border-r border-b border-t border-solid border-white bg-transparent hover:bg-white ml-2 text-white hover:text-current ">
+              {" "}
+              Upgrade
+            </button>
+          </span>
+        </a>
       </div>
       <div className="flex items-center justify-center py-1.5">
         <span className=" text-2xl font-bold font-serif text-slate-500">
-          -    Settings    -
+          - Settings -
         </span>
       </div>
       <div className="text-left text-lg font-semibold pl-11">
@@ -218,24 +236,26 @@ function ModeSelection() {
               </Tooltip>
             </p>
             <p>
-              <strong className="font-bold">Length：</strong> {videoMetadata.length}
+              <strong className="font-bold">Length：</strong>{" "}
+              {videoMetadata.length}
             </p>
             <p>
-              <strong className="font-bold">Location：</strong> {videoMetadata.location}
+              <strong className="font-bold">Location：</strong>{" "}
+              {videoMetadata.location}
             </p>
           </div>
         </div>
-        <div className="flex justify-end">
-          <label className="w-48 mr-16 flex items-center px-4 py-2 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white gap-4">
+        <div className="flex justify-end items-center">
+          <label className=" mr-16 flex items-center p-2 cursor-pointer bg-white rounded-full border hover:shadow-md uppercase border-indigo-300 hover:bg-indigo-500 hover:white">
             <svg
-              className="w-8 h-8 "
+              className="w-8 h-8 justify-center"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
               <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
             </svg>
-            <span className="mt-2 text-base leading-normal">Select a file</span>
+            <span className="opacity-0 hover:opacity-100 duration-300 absolute">Select a file</span>
             <input
               id="video"
               type="file"
@@ -244,7 +264,7 @@ function ModeSelection() {
             />
           </label>
         </div>
-        <hr className="border-t-2 border-gray-300 w-[1130px] my-4 mx-2" />
+        <hr className="border-t-2 border-gray-300 w-auto my-4 mx-2 mr-12"/>
       </div>
       <div>
         <div className="flex gap-40 ml-32">
