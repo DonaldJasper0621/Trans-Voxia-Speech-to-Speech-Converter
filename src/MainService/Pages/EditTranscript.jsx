@@ -20,7 +20,6 @@ import "./Publish.css";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import HashLoader from "react-spinners/HashLoader";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

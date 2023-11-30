@@ -92,8 +92,7 @@ const Processing = () => {
       return "Japanese";
     } else if (lan === "EN") {
       return "English";
-    }
-    else {
+    } else {
       return lan;
     }
   };
@@ -161,7 +160,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 20 seconds (20000 milliseconds)
-    const timerId = setInterval(fetchData, 20000);
+    const timerId = setInterval(fetchData, 10000);
 
     return () => {
       // Clean up the interval when the component is unmounted

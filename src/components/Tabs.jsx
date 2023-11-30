@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import './bgStyles.css'
 
 function Tabs({ tabs }) {
