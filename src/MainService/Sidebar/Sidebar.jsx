@@ -143,7 +143,7 @@ const Sidebar = () => {
               <li>
                 <NavLink to={'/service/gallery'} className="link">
                   <HiOutlineDatabase size={23}/>
-                  Gallery
+                  Studio
                 </NavLink>
               </li>
 

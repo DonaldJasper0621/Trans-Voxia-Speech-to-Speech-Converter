@@ -109,6 +109,28 @@ function TableRow({ data }) {
       return "Japanese";
     } else if (lan === "EN") {
       return "English";
+    } else if (lan === "RU") {
+      return "Russian";
+    } else if (lan === "ES") {
+      return "Spanish";
+    } else if (lan === "DE") {
+      return "German";
+    } else if (lan === "ID") {
+      return "Indonesian";
+    } else if (lan === "KO") {
+      return "Korean";
+    } else if (lan === "IT") {
+      return "Italian";
+    } else if (lan === "PL") {
+      return "Polish";
+    } else if (lan === "PT") {
+      return "Portuguese";
+    } else if (lan === "RO") {
+      return "Romanian";
+    } else if (lan === "SV") {
+      return "Swedish";
+    } else if (lan === "TR") {
+      return "Turkish";
     }
     else {
       return lan;

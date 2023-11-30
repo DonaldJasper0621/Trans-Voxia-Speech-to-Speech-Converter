@@ -246,16 +246,15 @@ function ModeSelection() {
           </div>
         </div>
         <div className="flex justify-end items-center">
-          <label className=" mr-16 flex items-center p-2 cursor-pointer bg-white rounded-full border hover:shadow-md uppercase border-indigo-300 hover:bg-indigo-500 hover:white">
+          <label className=" mr-16 flex items-center p-2 cursor-pointer bg-white rounded-full border hover:shadow-md border-indigo-300 hover:bg-indigo-500 hover:text-white">
             <svg
-              className="w-8 h-8 justify-center"
+              className="w-8 h-8 justify-center "
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
               <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
             </svg>
-            <span className="opacity-0 hover:opacity-100 duration-300 absolute">Select a file</span>
             <input
               id="video"
               type="file"
@@ -278,7 +277,7 @@ function ModeSelection() {
             <select
               onChange={handleLanguageChange}
               id="small"
-              className="  w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               {languagelist.map((data, index) => (
                 <option
@@ -329,7 +328,7 @@ function ModeSelection() {
         <div className="justify-end flex items-center ">
           <button
             type="button"
-            className="text-gray-900 w-48 mr-16  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-blue-300 ring-2 mt-20"
+            className=" text-indigo-400 w-auto px-4 py-2 mr-16 rounded-full shadow-lg tracking-wide uppercase border border-indigo-400 cursor-pointer hover:bg-indigo-400 hover:text-white font-semibold  focus:ring-3 focus:outline-none focus:ring-indigo-400 ring-1 mt-20"
             onClick={showAlert}
           >
             Confirm
