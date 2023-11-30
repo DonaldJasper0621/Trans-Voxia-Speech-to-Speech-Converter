@@ -14,13 +14,49 @@ import React, { useRef, useEffect } from "react";
 import axios from "axios";
 
 function TableRow({ data }) {
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsButtonDisabled(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsButtonDisabled(false);
+  };
+
+  const downloadTranscript = () => {
+    // Convert the transcript data into a string format
+    const transcriptText = data.transcript.map((t) => t.join("\t")).join("\n");
+
+    // Create a Blob from the transcript string
+    const blob = new Blob([transcriptText], { type: "text/plain" });
+
+    // Create a link element
+    const link = document.createElement("a");
+
+    // Set the download attribute to the filename you wish to use
+    link.download = "transcript.txt";
+
+    // Create a URL for the blob and set it as the href of the link
+    link.href = window.URL.createObjectURL(blob);
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+  };
+
   const getFileIcon = (mode) => {
     if (mode === "video") {
       return <MdOutlineVideoLibrary className="mr-1" size={32} />;
     } else if (mode === "audio") {
-      return <FaRegFileAudio className="mr-1 " size={32} />;
+      return <FaRegFileAudio className="max-h-[120px] max-w-[210px] overflow-hidden" strokeWidth="1px" color="#d1d5db" size={250} />;
     } else if (mode === "transcript") {
-      return <AiOutlineFolderOpen className="mr-1 " size={32} />;
+      return <AiOutlineFolderOpen className="max-h-[120px] max-w-[210px] overflow-hidden" strokeWidth="1px" color="#d1d5db" size={250} />;
     } else {
       return null;
     }
@@ -64,27 +100,55 @@ function TableRow({ data }) {
     return `${year}-${month}-${day}`;
   };
 
+  const getLanguage = (lan) => {
+    if (lan === "ZH") {
+      return "Chinese";
+    } else if (lan === "FR") {
+      return "Franch";
+    } else if (lan === "JA") {
+      return "Japanese";
+    } else if (lan === "EN") {
+      return "English";
+    }
+    else {
+      return lan;
+    }
+  };
+
   return (
     <div className="ml-6 mr-6 border-b border-gray-200 flex py-5 pl-7 w-auto">
-      <div className="flex py-3 mr-6 items-center">
+      {/*<div className="flex py-3 mr-6 items-center">
         <input type="checkbox" className="mx-auto h-4 w-4" />
-      </div>
+  </div>*/}
       <div className="flex mr-auto">
         <div className="flex items-center">
           {/* Render the appropriate icon based on the data type */}
-          {getFileIcon(data.mode)}
+          {data.mode === "audio" && getFileIcon(data.mode)}
+          {data.mode === "transcript" && getFileIcon(data.mode)}
+          {data.mode === "video" && (
+            <div className="rounded-lg ring-2 ring-slate-300 focus:ring-opacity-50 hover:ring-slate-600">
+            <video
+              src={data.mp4}
+              controls
+              className="rounded-lg max-h-[120px] max-w-[210px] aspect-video"
+            />
+          </div>
+          )}
         </div>
         <div className="text-left ml-6 flex-col overflow-hidden">
-          <h3 className="font-bold font-sans text-lg">{data.title}</h3>
-          <p className="text-xs text-zinc-400">{data.targetlanguage}</p>
-          <p className="text-xs text-zinc-400">{data.voice_selection}</p>
+          <h3 className="font-bold font-sans text-xl mb-1">{data.title}</h3>
+          <p className="text-sm font-serif italic text-zinc-400">By：{getLanguage(data.target_language)}</p>
+          <p className="text-xs text-zinc-400"> {data.voice_selection}</p>
+          <p className="text-sm font-serif italic mt-10 text-zinc-400">
+            Created：{getRequestTime(data.request_time)} 
+          </p>
         </div>
       </div>
-      <div className="flex justify-end mr-2">
+      <div className="flex justify-end items-center mr-2">
         <div className="mt-7 flex">
-          <p className="text-xs text-zinc-400 font-sans">
-            created :{getRequestTime(data.request_time)}
-          </p>
+          {/*<p className="text-sm font-serif italic text-zinc-400">
+            created :{getRequestTime(data.request_time)} 
+          </p>*/}
         </div>
         <div className="flex justify-end items-center min-w-[220px]">
           {" "}
@@ -99,32 +163,42 @@ function TableRow({ data }) {
         </NavLink> */}
           <NavLink
             to={"/service/transcript"}
-            target="_blank"
             className="btn bg-slate-200 shadow-md rounded-full py-2 px-2 flex items-center mr-4 hover:bg-emerald-100"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent the default navigation
+              downloadTranscript(); // Call the function to download transcript
+            }}
           >
             <MdOutlineDescription
-              className=" fill-emerald-500 justify-center hover:fill-emerald-600"
+              className="fill-emerald-500 justify-center hover:fill-emerald-600"
               size={21}
             />
-            <span className=" text-emerald-600"> Transcript</span>
+            <span className="text-emerald-600"> Transcript</span>
           </NavLink>
           {data.mode === "video" && (
             <>
               <NavLink
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDownloadLink(e, "audio");
-                }}
                 to={"/service/audio"}
                 target="_blank"
-                className="btn  bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center hover:bg-sky-100"
+                className={`btn bg-slate-200 shadow-md rounded-full px-2 py-2 mr-4 flex items-center ${
+                  isButtonDisabled
+                    ? "cursor-not-allowed"
+                    : "hover:cursor-not-allowed"
+                }`}
+                onClick={(e) => {
+                  if (isButtonDisabled) {
+                    e.preventDefault();
+                  } else {
+                    // Handle your onClick event here
+                  }
+                }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
-                <MdOutlineHeadphones
-                  className=" fill-sky-600 justify-center hover:fill-sky-800"
-                  size={21}
-                />
-                <span className=" text-sky-600 "> Audio</span>
+                <MdOutlineHeadphones className="fill-sky-600" size={21} />
+                <span className="text-sky-600"> Audio</span>
               </NavLink>
+
               <NavLink
                 onClick={(e) => {
                   e.preventDefault();
@@ -203,7 +277,7 @@ function App() {
   useEffect(() => {
     axios
       .get(
-        `https://0e71-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
+        `https://b45e-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
         {
           headers: {
             "ngrok-skip-browser-warning": 123,
@@ -223,12 +297,14 @@ function App() {
 
   const fetchMoreData = () => {
     axios
-      .get(`https://0e71-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
-      {
-        headers: {
-          "ngrok-skip-browser-warning": 123,
-        },
-      })
+      .get(
+        `https://b45e-140-119-19-91.ngrok-free.app/tasks?n=${PAGE_ITEM}&page=${page}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": 123,
+          },
+        }
+      )
       .then((response) => {
         const completedTasks = response.data.results.filter(
           (task) => task.status === "任務完成"

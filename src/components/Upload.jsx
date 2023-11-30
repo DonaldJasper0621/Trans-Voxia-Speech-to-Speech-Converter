@@ -78,7 +78,7 @@ const VideoDashboard = () => {
   const tabs = [
     {
       id: 3,
-      icon: <MdOutlineMap className="mr-2 fill-slate-600" size={24} />,
+      icon: <MdOutlineMap className="mr-2 fill-slate-600" size={30} />,
       label: <span className="font-semibold text-lg text-slate-500">All</span>,
       content: <TableRow />,
     },

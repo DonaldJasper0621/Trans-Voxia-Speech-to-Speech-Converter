@@ -51,7 +51,7 @@ function Tabs({ tabs }) {
                 key={tab.id}
                 className={`flex cursor-pointer items-center tab w-18 ${
                   activeTab === tab.id
-                    ? "border-b-2 border-blue-500"
+                    ? "border-b-2 border-indigo-700 w-auto "
                     : "hover:border-b-2 hover:border-blue-500"
                 }`}
                 onClick={() => handleTabClick(tab.id)}
