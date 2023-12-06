@@ -54,9 +54,9 @@ function TableRow({ data }) {
     if (mode === "video") {
       return <MdOutlineVideoLibrary className="mr-1" size={32} />;
     } else if (mode === "audio") {
-      return <FaRegFileAudio className="mr-1 " size={32} />;
+      return <FaRegFileAudio className="max-h-[120px] max-w-[210px] overflow-hidden" strokeWidth="1px" color="#d1d5db" size={250} />;
     } else if (mode === "transcript") {
-      return <AiOutlineFolderOpen className="mr-1 " size={32} />;
+      return <AiOutlineFolderOpen className="max-h-[120px] max-w-[210px] overflow-hidden" strokeWidth="1px" color="#d1d5db" size={250} />;
     } else {
       return null;
     }
@@ -100,27 +100,55 @@ function TableRow({ data }) {
     return `${year}-${month}-${day}`;
   };
 
+  const getLanguage = (lan) => {
+    if (lan === "ZH") {
+      return "Chinese";
+    } else if (lan === "FR") {
+      return "Franch";
+    } else if (lan === "JA") {
+      return "Japanese";
+    } else if (lan === "EN") {
+      return "English";
+    }
+    else {
+      return lan;
+    }
+  };
+
   return (
     <div className="ml-6 mr-6 border-b border-gray-200 flex py-5 pl-7 w-auto">
-      <div className="flex py-3 mr-6 items-center">
+      {/*<div className="flex py-3 mr-6 items-center">
         <input type="checkbox" className="mx-auto h-4 w-4" />
-      </div>
+  </div>*/}
       <div className="flex mr-auto">
         <div className="flex items-center">
           {/* Render the appropriate icon based on the data type */}
-          {getFileIcon(data.mode)}
+          {data.mode === "audio" && getFileIcon(data.mode)}
+          {data.mode === "transcript" && getFileIcon(data.mode)}
+          {data.mode === "video" && (
+            <div className="rounded-lg ring-2 ring-slate-300 focus:ring-opacity-50 hover:ring-slate-600">
+            <video
+              src={data.mp4}
+              controls
+              className="rounded-lg max-h-[120px] max-w-[210px] aspect-video"
+            />
+          </div>
+          )}
         </div>
         <div className="text-left ml-6 flex-col overflow-hidden">
-          <h3 className="font-bold font-sans text-lg">{data.title}</h3>
-          <p className="text-xs text-zinc-400">{data.targetlanguage}</p>
-          <p className="text-xs text-zinc-400">{data.voice_selection}</p>
+          <h3 className="font-bold font-sans text-xl mb-1">{data.title}</h3>
+          <p className="text-sm font-serif italic text-zinc-400">By：{getLanguage(data.target_language)}</p>
+          <p className="text-xs text-zinc-400"> {data.voice_selection}</p>
+          <p className="text-sm font-serif italic mt-10 text-zinc-400">
+            Created：{getRequestTime(data.request_time)} 
+          </p>
         </div>
       </div>
-      <div className="flex justify-end mr-2">
+      <div className="flex justify-end items-center mr-2">
         <div className="mt-7 flex">
-          <p className="text-xs text-zinc-400 font-sans">
-            created :{getRequestTime(data.request_time)}
-          </p>
+          {/*<p className="text-sm font-serif italic text-zinc-400">
+            created :{getRequestTime(data.request_time)} 
+          </p>*/}
         </div>
         <div className="flex justify-end items-center min-w-[220px]">
           {" "}
