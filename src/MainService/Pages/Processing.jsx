@@ -44,7 +44,7 @@ const Processing = () => {
 
   const handleStopTaskClick = (taskID) => (events) => {
     axios
-      .post(`https://b45e-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
+      .post(`https://062b-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           setTimeout(() => {
@@ -83,46 +83,9 @@ const Processing = () => {
       });
   };
 
-  const getLanguage = (lan) => {
-    if (lan === "ZH") {
-      return "Chinese";
-    } else if (lan === "FR") {
-      return "Franch";
-    } else if (lan === "JA") {
-      return "Japanese";
-    } else if (lan === "EN") {
-      return "English";
-    } else if (lan === "RU") {
-      return "Russian";
-    } else if (lan === "ES") {
-      return "Spanish";
-    } else if (lan === "DE") {
-      return "German";
-    } else if (lan === "ID") {
-      return "Indonesian";
-    } else if (lan === "KO") {
-      return "Korean";
-    } else if (lan === "IT") {
-      return "Italian";
-    } else if (lan === "PL") {
-      return "Polish";
-    } else if (lan === "PT") {
-      return "Portuguese";
-    } else if (lan === "RO") {
-      return "Romanian";
-    } else if (lan === "SV") {
-      return "Swedish";
-    } else if (lan === "TR") {
-      return "Turkish";
-    }
-    else {
-      return lan;
-    }
-  };
-
   // const handleContinueTaskClick = (taskID) => (events) => {
   //   axios
-  //     .post(`https://b45e-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
+  //     .post(`https://062b-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
   //     .then((response) => {
   //       if (response.status === 200) {
   //         console.log(response);
@@ -167,7 +130,7 @@ const Processing = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://b45e-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
+          "https://062b-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
           {
             headers: {
               "ngrok-skip-browser-warning": 123,
@@ -183,7 +146,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 20 seconds (20000 milliseconds)
-    const timerId = setInterval(fetchData, 20000);
+    const timerId = setInterval(fetchData, 5000);
 
     return () => {
       // Clean up the interval when the component is unmounted
@@ -273,11 +236,11 @@ const Processing = () => {
                           />
                         </div>
                         <div className="ml-6 flex-auto">
-                          <div className="text-md text-left font-semibold max-w-[550px] overflow-hidden py-2">
+                          <div className="text-md text-left font-semibold py-2">
                             {video.title}
                           </div>
                           <p className="text-sm text-left text-gray-600 font-serif italic">
-                            By {getLanguage(video.target_language)}
+                            By {video.target_language}
                           </p>
                         </div>
                         <div className="object-right-top flex justify-between py-4">

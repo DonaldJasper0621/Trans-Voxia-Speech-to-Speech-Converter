@@ -21,12 +21,12 @@ function Trip() {
         <TripData
           image={Vanessa}
           heading="Vanessa Huang"
-          text="Database Engineer"
+          text=" Project Manager"
         />
         <TripData
           image={Jonaya}
           heading="Jenaya Lin"
-          text="Database Engineer"
+          text="Vocals Specialist"
         />
         <TripData
           image={Apple}
