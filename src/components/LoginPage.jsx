@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import PuffLoader from "react-spinners/PuffLoader";
+import { Dna } from "react-loader-spinner";
 
 function LoginPage() {
   const emailRef = useRef(null);

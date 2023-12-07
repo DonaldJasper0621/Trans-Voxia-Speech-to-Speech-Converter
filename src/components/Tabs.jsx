@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Dna } from "react-loader-spinner";
 import './bgStyles.css'
 
 function Tabs({ tabs }) {
@@ -55,7 +56,7 @@ function Tabs({ tabs }) {
                 key={tab.id}
                 className={`flex cursor-pointer items-center tab w-18 ${
                   activeTab === tab.id
-                    ? "border-b-2 border-indigo-700 w-auto "
+                    ? "border-b-2 border-blue-500"
                     : "hover:border-b-2 hover:border-blue-500"
                 }`}
                 onClick={() => handleTabClick(tab.id)}

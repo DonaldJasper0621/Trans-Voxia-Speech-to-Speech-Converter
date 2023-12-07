@@ -524,57 +524,54 @@ const EditTranscripts = () => {
           </Alert>
         )}
       </Snackbar>
-      <div className="container mx-auto px-4 bg-slate-200">
-        <div className="flex items-center justify-center py-2 mt-1">
-          <span className=" text-2xl font-bold font-serif text-slate-500">
-            - Edit Transcript -
-          </span>
-        </div>
-        <div className="flex justify-around">
+
+      <div className="container mx-auto px-4 bg-slate-300">
+        <div className="mb-4">
           {/* <video
             src={video.mp4 || video.mp3}
             controls
             className="max-h-[150px] aspect-video"
           /> */}
-          <div className="font-light">
-            <div className="text-xl font-semibold text-gray-500">{video.title}</div>
-            <p className="text-sm text-gray-600 font-serif">By {getLanguage(video.target_language)} • {video.status}</p>
+          <div className="ml-6 font-light">
+            <div className="text-md font-semibold">{video.title}</div>
+            <p className="text-sm text-gray-600">By {video.target_language}</p>
+            <p>{video.status}</p>
           </div>
         </div>
-        <hr className="border-t-1 border-gray-600 shadow-lg w-auto mr-80 ml-80 rounded-lg" />
-        <div className="overflow-y-auto max-h-[200px] mb-4 mt-4 flex gap-1 justify-evenly">
+
+        <div className="overflow-y-auto max-h-[200px] mb-4">
           {Array.from({ length: video.speaker_counts }, (_, i) => {
             const speakerNumber = i + 1;
             let speakerLabel;
 
             switch (speakerNumber) {
               case 1:
-                speakerLabel = "Speaker 1 ";
+                speakerLabel = "Speaker 1 Voices";
                 break;
               case 2:
-                speakerLabel = "Speaker 2 ";
+                speakerLabel = "Speaker 2 Voices";
                 break;
               case 3:
-                speakerLabel = "Speaker 3 ";
+                speakerLabel = "Speaker 3 Voices";
                 break;
               default:
-                speakerLabel = `Speaker ${speakerNumber} `;
+                speakerLabel = `Speaker ${speakerNumber} Voices`;
                 break;
             }
 
             return (
               <div key={`dropdown-container-${i}`}>
-                <div className="grid justify-items-start">
-                <label
+                <div className="block">
+                  <label
                     htmlFor={`voice-dropdown-${i}`}
-                    className="font-medium ml-1 text-gray-900 dark:text-white"
+                    className="mb-2 text-base font-medium text-gray-900 dark:text-white"
                   >
                     {speakerLabel}
                   </label>
                   <select
                     onChange={handleVoiceLanguageChange(speakerNumber)}
                     id={`voice-dropdown-${i}`}
-                    className="w-80 bg-gray-50 border border-gray-300 text-gray-900 mb-3 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-96 bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     {voices[voicelanguageselect] &&
                       voices[voicelanguageselect].usable_voices.map((value) => (
@@ -588,7 +585,6 @@ const EditTranscripts = () => {
             );
           })}
         </div>
-        
 
         <button
           className="button-hold"
