@@ -28,7 +28,7 @@ function Home() {
         title="Speech to Speech"
         text="Generate realistic audio using our online AI Voice Generator and the best translate bot. Instantly convert text in to natural-sounding speech and download as MP3 and WAV audio files."
         buttonText="Create Free Translated AI voice video"
-        url="/"
+        url="/service/medialibrary"
         btnClass="show"
       />
       <LandingPage />

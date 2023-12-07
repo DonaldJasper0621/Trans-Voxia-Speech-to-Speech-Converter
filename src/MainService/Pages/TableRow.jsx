@@ -268,7 +268,7 @@ function TableRow({ data }) {
 
 // Example usage of TableRow componentttt
 // Example usage of TableRow component
-const PAGE_ITEM = 50;
+const PAGE_ITEM = 30;
 function App() {
   const [tasks, setTasks] = useState([]);
   const [page, setPage] = useState(1);
