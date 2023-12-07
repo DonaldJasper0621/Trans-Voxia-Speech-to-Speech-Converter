@@ -83,6 +83,21 @@ const Processing = () => {
       });
   };
 
+  const getLanguage = (lan) => {
+    if (lan === "ZH") {
+      return "Chinese";
+    } else if (lan === "FR") {
+      return "Franch";
+    } else if (lan === "JA") {
+      return "Japanese";
+    } else if (lan === "EN") {
+      return "English";
+    }
+    else {
+      return lan;
+    }
+  };
+
   // const handleContinueTaskClick = (taskID) => (events) => {
   //   axios
   //     .post(`https://062b-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
@@ -146,7 +161,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 20 seconds (20000 milliseconds)
-    const timerId = setInterval(fetchData, 5000);
+    const timerId = setInterval(fetchData, 20000);
 
     return () => {
       // Clean up the interval when the component is unmounted

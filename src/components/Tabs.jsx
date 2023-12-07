@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Dna } from "react-loader-spinner";
 import './bgStyles.css'
 
 function Tabs({ tabs }) {
