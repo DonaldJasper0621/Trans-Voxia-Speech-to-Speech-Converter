@@ -33,7 +33,7 @@ function ModeSelection() {
 
   useEffect(() => {
     axios
-      .get("https://062b-140-119-19-91.ngrok-free.app/language/", {
+      .get("https://transvoxia.ngrok.io/language/", {
         headers: {
           "ngrok-skip-browser-warning": 123,
         },
@@ -68,7 +68,7 @@ function ModeSelection() {
 
     axios
       .postForm(
-        `https://062b-140-119-19-91.ngrok-free.app/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
+        `https://transvoxia.ngrok.io/tasks/?target_language=${posttargetlanguage}&mode=${postoutputmode}&title=${posttitle}&needBgmusic=${postBGM}`,
         {
           file: document.querySelector("#video").files[0],
         },

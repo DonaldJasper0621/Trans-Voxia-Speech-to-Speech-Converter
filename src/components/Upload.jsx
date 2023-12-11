@@ -31,7 +31,7 @@ const VideoDashboard = () => {
   const fetchVideoTasks = () => {
     axios
       .get(
-        `https://062b-140-119-19-91.ngrok-free.app/tasks/?n=${PAGE_ITEM}&page=${page}`,
+        `https://transvoxia.ngrok.io/tasks/?n=${PAGE_ITEM}&page=${page}`,
         {
           headers: {
             "ngrok-skip-browser-warning": 123,

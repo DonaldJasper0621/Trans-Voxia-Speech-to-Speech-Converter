@@ -364,7 +364,7 @@ const EditTranscripts = () => {
 
   useEffect(() => {
     axios
-      .get("https://062b-140-119-19-91.ngrok-free.app/voices/", {
+      .get("https://transvoxia.ngrok.io/voices/", {
         headers: {
           "ngrok-skip-browser-warning": 123,
         },
@@ -392,7 +392,7 @@ const EditTranscripts = () => {
     // let fieldFormatted = field.map((item) => item.join(",")).join("\n");
 
     // Form the URL with the required query parameters
-    let url = `https://062b-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`;
+    let url = `https://transvoxia.ngrok.io/continue_task/${taskID}/`;
     console.log("URL:", url);
     console.log("Headers:", {
       "ngrok-skip-browser-warning": 123,

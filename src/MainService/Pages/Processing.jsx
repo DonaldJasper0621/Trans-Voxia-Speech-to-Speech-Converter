@@ -44,7 +44,7 @@ const Processing = () => {
 
   const handleStopTaskClick = (taskID) => (events) => {
     axios
-      .post(`https://062b-140-119-19-91.ngrok-free.app/stop_task/${taskID}/`)
+      .post(`https://transvoxia.ngrok.io/stop_task/${taskID}/`)
       .then((response) => {
         if (response.status === 200) {
           setTimeout(() => {
@@ -85,7 +85,7 @@ const Processing = () => {
 
   // const handleContinueTaskClick = (taskID) => (events) => {
   //   axios
-  //     .post(`https://062b-140-119-19-91.ngrok-free.app/continue_task/${taskID}/`)
+  //     .post(`https://transvoxia.ngrok.io/continue_task/${taskID}/`)
   //     .then((response) => {
   //       if (response.status === 200) {
   //         console.log(response);
@@ -130,7 +130,7 @@ const Processing = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://062b-140-119-19-91.ngrok-free.app/tasks/?n=10&page=1",
+          "https://transvoxia.ngrok.io/tasks/?n=10&page=1",
           {
             headers: {
               "ngrok-skip-browser-warning": 123,
@@ -146,7 +146,7 @@ const Processing = () => {
     fetchData();
 
     // Fetch new data every 20 seconds (20000 milliseconds)
-    const timerId = setInterval(fetchData, 5000);
+    const timerId = setInterval(fetchData, 20000);
 
     return () => {
       // Clean up the interval when the component is unmounted
